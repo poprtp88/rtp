@@ -356,19 +356,21 @@ body {
 
 .console-window {
     background: var(--bg-console);
-    border: 2px solid var(--accent-cyan);
-    border-radius: 8px;
+    border: 1px solid var(--accent-cyan);
+    border-radius: 4px;
     overflow: hidden;
     box-shadow: var(--glow-cyan);
+    transition: all 0.3s ease;
 }
 
 .console-header {
     background: var(--bg-tertiary);
-    padding: 10px 15px;
+    padding: 5px 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--accent-cyan);
+    cursor: pointer;  /* added to show it's clickable */
 }
 
 .console-title {
@@ -402,16 +404,19 @@ body {
 .control-close { background: var(--accent-red); }
 
 .console-body {
-    padding: 15px;
+    padding: 8px;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10px;
+    max-height: 300px;  /* default height */
+    transition: max-height 0.3s ease;
+    overflow: hidden;
 }
 
 .console-line {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 6px 0;
+    gap: 6px;
+    padding: 3px 0;
     color: var(--text-secondary);
 }
 
@@ -438,19 +443,32 @@ body {
     animation: pulse 2s ease-in-out infinite;
 }
 
+.console-window.minimized .console-body {
+    max-height: 0;
+    padding: 0;
+}
+
+.console-minimize-icon {
+    transition: transform 0.3s ease;
+}
+
+.console-window.minimized .console-minimize-icon {
+    transform: rotate(180deg);
+}
+
 /* ============================================
    TIMER SECTION
    ============================================ */
 
 .timer-section {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .timer-container {
     background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
     border: 2px solid var(--accent-cyan);
     border-radius: 10px;
-    padding: 20px;
+    padding: 10px 15px; /* Reduced padding */
     text-align: center;
     box-shadow: var(--glow-cyan);
     position: relative;
@@ -507,15 +525,16 @@ body {
 
 .timer-display {
     font-family: var(--font-mono);
-    font-size: 48px;
-    font-weight: 900;
+    /* Reduced font size significantly */
+    font-size: 28px;
+    font-weight: 700;
     color: var(--accent-green);
     text-shadow: var(--glow-green);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    margin-bottom: 15px;
+    gap: 2px; /* Reduced gap between numbers and separator */
+    margin-bottom: 10px; /* Reduced bottom margin */
 }
 
 .timer-separator {
@@ -532,11 +551,12 @@ body {
     margin-bottom: 10px;
 }
 
+/* Adjust progress bar to be thinner */
 .timer-progress-bar {
     width: 100%;
-    height: 6px;
+    height: 4px; /* Reduced height */
     background: var(--bg-console);
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--accent-cyan);
     position: relative;
@@ -672,7 +692,7 @@ body {
    ============================================ */
 
 .banner-carousel {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .carousel-container {
@@ -1403,16 +1423,35 @@ body {
    RESPONSIVE - MOBILE FIRST
    ============================================ */
 
-/* Small phones */
-@media (max-width: 360px) {
+/* Base mobile layout - 3 games per row */
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 15px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Extra small phones (smaller than 360px) */
+@media (max-width: 359px) {
     .games-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        gap: 6px; /* Smaller gap for very small screens */
     }
     
-    .modal-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+    .game-card {
+        border-width: 1px; /* Thinner borders */
+    }
+    
+    .game-info {
+        padding: 6px; /* Less padding */
+    }
+    
+    .game-rtp-container {
+        padding: 6px 8px;
+    }
+    
+    .rtp-value {
+        font-size: 16px; /* Slightly smaller font */
     }
     
     .main-title {
@@ -1421,6 +1460,47 @@ body {
     
     .timer-display {
         font-size: 36px;
+    }
+}
+
+/* Larger phones / small tablets */
+@media (min-width: 480px) {
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+    }
+}
+
+/* Tablets */
+@media (min-width: 768px) {
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+    }
+    
+    .system-status-bar {
+        height: 40px;
+        font-size: 11px;
+    }
+    
+    .main-title {
+        font-size: 22px;
+    }
+    
+    .timer-display {
+        font-size: 56px;
+    }
+    
+    .carousel-container {
+        height: 220px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
     }
 }
 
@@ -1518,5 +1598,43 @@ body {
     
     .game-card:active {
         transform: scale(0.98);
+    }
+}
+
+/* Container untuk banner dan timer pada desktop */
+.banner-timer-container {
+    display: block; /* Default untuk mobile */
+    width: 100%;
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+    .banner-timer-container {
+        display: grid;
+        grid-template-columns: 300px 1fr; /* 300px untuk timer, sisanya untuk banner */
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* Mengatur ulang margin bottom pada timer dan banner */
+    .timer-section {
+        margin-bottom: 0;
+    }
+
+    .banner-carousel {
+        margin-bottom: 0;
+    }
+
+    /* Optional: Menyesuaikan tinggi banner */
+    .carousel-container {
+        height: 220px;
+    }
+
+    /* Optional: Menyesuaikan timer container */
+    .timer-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 }

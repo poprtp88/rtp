@@ -57,12 +57,12 @@
                         <span class="logo-text">POP REDE</span>
                         <span class="logo-bracket">]</span>
                     </div>
-                    <div class="version-tag">v2.0.1-BR</div>
+                    <div class="version-tag">v8.9.1-BR</div>
                 </div>
                 <div class="header-center">
                     <h1 class="main-title">
                         <span class="title-prefix">///</span>
-                        SISTEMA DE ANÁLISE RTP
+                        SISTEMA DE RTP
                         <span class="title-suffix">///</span>
                     </h1>
                     <div class="subtitle">RASTREAMENTO EM TEMPO REAL</div>
@@ -86,130 +86,74 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            
-            <!-- System Console -->
-            <section class="console-section">
-                <div class="console-window">
-                    <div class="console-header">
-                        <div class="console-title">
-                            <span class="console-icon">▶</span>
-                            CONSOLE DO SISTEMA
+            <!-- Wrapper baru untuk banner dan timer -->
+            <div class="banner-timer-container">
+                <!-- Data Window Timer (Kiri) -->
+                <section class="timer-section">
+                    <div class="timer-container">
+                        <div class="timer-display" id="countdownTimer">
+                            <span class="timer-minutes" id="timerMinutes">09</span>
+                            <span class="timer-separator">:</span>
+                            <span class="timer-seconds" id="timerSeconds">45</span>
                         </div>
-                        <div class="console-controls">
-                            <span class="control-dot control-minimize"></span>
-                            <span class="control-dot control-maximize"></span>
-                            <span class="control-dot control-close"></span>
-                        </div>
-                    </div>
-                    <div class="console-body">
-                        <div class="console-line">
-                            <span class="console-prompt">[SISTEMA]</span>
-                            <span class="console-text">Inicializando módulos RTP...</span>
-                            <span class="console-status console-ok">✓ OK</span>
-                        </div>
-                        <div class="console-line">
-                            <span class="console-prompt">[DATABASE]</span>
-                            <span class="console-text">Conectado ao servidor</span>
-                            <span class="console-status console-ok">✓ OK</span>
-                        </div>
-                        <div class="console-line">
-                            <span class="console-prompt">[SYNC]</span>
-                            <span class="console-text">Sincronização habilitada</span>
-                            <span class="console-status console-ok">✓ OK</span>
-                        </div>
-                        <div class="console-line">
-                            <span class="console-prompt">[RTP]</span>
-                            <span class="console-text">Sistema ativo</span>
-                            <span class="console-status console-active">● ATIVO</span>
+                        <div class="timer-progress">
+                            <div class="timer-progress-bar" id="timerProgressBar"></div>
+                            <div class="timer-progress-text">
+                                <span>INÍCIO</span>
+                                <span id="progressPercent">75%</span>
+                                <span>PRÓXIMO</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Data Window Timer -->
-            <section class="timer-section">
-                <div class="timer-container">
-                    <div class="timer-header">
-                        <div class="timer-label">
-                            <span class="timer-icon">⏱</span>
-                            JANELA DE ATUALIZAÇÃO
+                <!-- Banner Carousel (Kanan) -->
+                <section class="banner-carousel">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">◉</span>
+                            <span class="section-text">FILTRO</span>
                         </div>
-                        <div class="timer-cycle" id="cycleCount">CICLO #1</div>
-                    </div>
-                    <div class="timer-display" id="countdownTimer">
-                        <span class="timer-minutes" id="timerMinutes">09</span>
-                        <span class="timer-separator">:</span>
-                        <span class="timer-seconds" id="timerSeconds">45</span>
-                    </div>
-                    <div class="timer-progress">
-                        <div class="timer-progress-bar" id="timerProgressBar"></div>
-                        <div class="timer-progress-text">
-                            <span>INÍCIO</span>
-                            <span id="progressPercent">75%</span>
-                            <span>PRÓXIMO</span>
+                        <div class="section-stats">
+                            <span class="stats-value" id="displayedGames">0</span>
+                            <span class="stats-separator">/</span>
+                            <span class="stats-total" id="totalGames">623</span>
                         </div>
                     </div>
-                    <div class="timer-info">
-                        <span class="info-dot"></span>
-                        Recalculado a cada 3 minutos
-                    </div>
-                </div>
-            </section>
-
-            <!-- Banner Carousel -->
-            <section class="banner-carousel">
-                <div class="section-header">
-                    <div class="section-title">
-                        <span class="section-icon">▶</span>
-                        <span class="section-text">CAMPANHAS</span>
-                    </div>
-                    <div class="section-badge">ATIVO</div>
-                </div>
-                <div class="carousel-container">
-                    <div class="carousel-track" id="carouselTrack">
-                        <div class="carousel-slide">
-                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 1">
-                            <div class="carousel-overlay"></div>
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="carouselTrack">
+                            <div class="carousel-slide">
+                                <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 1">
+                                <div class="carousel-overlay"></div>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 2">
+                                <div class="carousel-overlay"></div>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 3">
+                                <div class="carousel-overlay"></div>
+                            </div>
                         </div>
-                        <div class="carousel-slide">
-                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 2">
-                            <div class="carousel-overlay"></div>
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 3">
-                            <div class="carousel-overlay"></div>
+                        
+                        <button class="carousel-btn carousel-btn-prev" id="prevBtn">
+                            <span>‹</span>
+                        </button>
+                        <button class="carousel-btn carousel-btn-next" id="nextBtn">
+                            <span>›</span>
+                        </button>
+                        
+                        <div class="carousel-dots" id="carouselDots">
+                            <span class="dot active" data-slide="0"></span>
+                            <span class="dot" data-slide="1"></span>
+                            <span class="dot" data-slide="2"></span>
                         </div>
                     </div>
-                    
-                    <button class="carousel-btn carousel-btn-prev" id="prevBtn">
-                        <span>‹</span>
-                    </button>
-                    <button class="carousel-btn carousel-btn-next" id="nextBtn">
-                        <span>›</span>
-                    </button>
-                    
-                    <div class="carousel-dots" id="carouselDots">
-                        <span class="dot active" data-slide="0"></span>
-                        <span class="dot" data-slide="1"></span>
-                        <span class="dot" data-slide="2"></span>
-                    </div>
-                </div>
-            </section>
+                </section>
+            </div>
 
             <!-- Provider Filter -->
             <section class="provider-section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <span class="section-icon">◉</span>
-                        <span class="section-text">FILTRO</span>
-                    </div>
-                    <div class="section-stats">
-                        <span class="stats-value" id="displayedGames">0</span>
-                        <span class="stats-separator">/</span>
-                        <span class="stats-total" id="totalGames">623</span>
-                    </div>
-                </div>
-                
                 <button class="provider-selector" id="hamburgerBtn">
                     <span class="selector-icon">▼</span>
                     <span class="selector-name" id="currentProviderName">TODOS</span>
@@ -269,6 +213,49 @@
 
             <!-- Games Grid -->
             <section class="games-section">
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Games loaded here -->
+                </div>
+            </section>
+            
+            <!-- System Console -->
+            <section class="console-section">
+                <div class="console-window">
+                    <div class="console-header">
+                        <div class="console-title">
+                            <span class="console-icon">▶</span>
+                            CONSOLE DO SISTEMA
+                            <div class="console-minimize-icon">▼</div>
+                        </div>
+                        <div class="console-controls">
+                            <span class="control-dot control-minimize"></span>
+                            <span class="control-dot control-maximize"></span>
+                            <span class="control-dot control-close"></span>
+                        </div>
+                    </div>
+                    <div class="console-body">
+                        <div class="console-line">
+                            <span class="console-prompt">[SISTEMA]</span>
+                            <span class="console-text">Inicializando módulos RTP...</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[DATABASE]</span>
+                            <span class="console-text">Conectado ao servidor</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[SYNC]</span>
+                            <span class="console-text">Sincronização habilitada</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[RTP]</span>
+                            <span class="console-text">Sistema ativo</span>
+                            <span class="console-status console-active">● ATIVO</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="section-header">
                     <div class="section-title">
                         <span class="section-icon">◉</span>
@@ -278,9 +265,6 @@
                         <span class="refresh-icon">↻</span>
                         <span class="refresh-text">--:--</span>
                     </div>
-                </div>
-                <div class="games-grid" id="gamesGrid">
-                    <!-- Games loaded here -->
                 </div>
             </section>
         </div>
