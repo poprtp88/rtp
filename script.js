@@ -8,7 +8,7 @@
 // CODE PROTECTION SYSTEM
 // ============================================
 
-
+/* BAGIAN INI UNTUK DISABLE SEMUA DEVELOPER TOOLS
 (function() {
     'use strict';
     
@@ -103,7 +103,7 @@
 // ============================================
 // CONFIGURAÇÃO
 // ============================================
-
+*/
 const CONFIG = {
     gamesPerProvider: 0, // 0 = mostrar todos
     rtpRanges: {
