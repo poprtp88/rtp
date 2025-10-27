@@ -110,13 +110,13 @@ body {
 
 .data-stream {
     position: absolute;
-    top: -50%;
+    top: -45%;
     left: 0;
     width: 100%;
     height: 200%;
     opacity: 0.03;
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 20px;
     color: var(--accent-green);
     overflow: hidden;
     animation: dataStream 20s linear infinite;
@@ -468,7 +468,7 @@ body {
     background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
     border: 2px solid var(--accent-cyan);
     border-radius: 10px;
-    padding: 10px 15px; /* Reduced padding */
+    padding: 0px 15px; 
     text-align: center;
     box-shadow: var(--glow-cyan);
     position: relative;
@@ -525,8 +525,8 @@ body {
 
 .timer-display {
     font-family: var(--font-mono);
-    /* Reduced font size significantly */
-    font-size: 28px;
+    /* Increased font size for better visibility */
+    font-size: 56px;
     font-weight: 700;
     color: var(--accent-green);
     text-shadow: var(--glow-green);
@@ -534,7 +534,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 2px; /* Reduced gap between numbers and separator */
-    margin-bottom: 10px; /* Reduced bottom margin */
+    margin-top: 8px; /* Add top margin to push numbers down */
+    margin-bottom: -10px; /* Slightly reduced bottom margin */
 }
 
 .timer-separator {
@@ -793,7 +794,7 @@ body {
    ============================================ */
 
 .provider-section {
-    margin-bottom: 20px;
+    margin-bottom: -20px;
 }
 
 .provider-selector {
@@ -1363,9 +1364,9 @@ body {
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s ease;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
     display: block;
-    min-height: 48px;
+    min-height: 80px;
 }
 
 .platform-card:hover, .platform-card:active {
@@ -1377,7 +1378,9 @@ body {
 .platform-card img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
+    padding: 8px;
 }
 
 .platform-overlay {
@@ -1459,7 +1462,7 @@ body {
     }
     
     .timer-display {
-        font-size: 36px;
+        font-size: 64px;
     }
 }
 
@@ -1488,7 +1491,7 @@ body {
     }
     
     .timer-display {
-        font-size: 56px;
+        font-size: 86px;
     }
     
     .carousel-container {
@@ -1531,7 +1534,7 @@ body {
     }
     
     .timer-display {
-        font-size: 56px;
+        font-size: 82px;
     }
     
     .carousel-container {
@@ -1549,6 +1552,53 @@ body {
     .modal-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     }
+}
+
+/* ============================================
+   CODE PROTECTION
+   ============================================ */
+
+/* Disable text selection */
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Allow text selection only for input fields */
+input, textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* Disable right-click context menu */
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide scrollbars to prevent inspection */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* Disable drag and drop */
+img, a {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
 }
 
 /* ============================================
@@ -1598,6 +1648,18 @@ body {
     
     .game-card:active {
         transform: scale(0.98);
+    }
+}
+
+/* ============================================
+   MOBILE-SPECIFIC LOGO CENTERING
+   ============================================ */
+
+/* Center only POP REDE text on mobile */
+@media (max-width: 767px) {
+    .header-left {
+        justify-content: center;
+        width: 100%;
     }
 }
 
