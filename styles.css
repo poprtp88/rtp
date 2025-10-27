@@ -5,7 +5,7 @@
 
 :root {
     /* Ultra Dark Color Palette */
-    --bg-primary: #050a1e;
+    --bg-primary: #000000;
     --bg-secondary: #0a0e27;
     --bg-tertiary: #111729;
     --bg-card: #0d1126;
@@ -991,11 +991,11 @@ body {
     opacity: 1;
 }
 
-/* CRITICAL: SQUARE IMAGES (1:1 RATIO) */
+/* CRITICAL: SQUARE IMAGES (472:360 RATIO) */
 .game-image-container {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1; /* SQUARE! */
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--bg-console);
 }
