@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0e27">
+    <title>POP REDE - SISTEMA RTP v2.0</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Terminal Background Effect -->
+    <div class="terminal-bg">
+        <div class="grid-overlay"></div>
+        <div class="scan-line"></div>
+        <div class="data-stream" id="dataStream"></div>
+    </div>
+
+    <!-- System Status Bar -->
+    <div class="system-status-bar">
+        <div class="status-group">
+            <div class="status-item">
+                <span class="status-icon">●</span>
+                <span class="status-label">SISTEMA:</span>
+                <span class="status-value status-online">ONLINE</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">SYNC:</span>
+                <span class="status-value" id="syncStatus">SINCRONIZADO</span>
+            </div>
+        </div>
+        <div class="status-group">
+            <div class="status-item">
+                <span class="status-label">PRÓX.:</span>
+                <span class="status-value" id="nextUpdate">--:--</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">JOGOS:</span>
+                <span class="status-value" id="activeGames">623</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal Command Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="terminal-prompt">
+                <span class="prompt-symbol">root@poprede:~$</span>
+                <span class="prompt-command">./rtp-analytics --mode=live</span>
+            </div>
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo-container">
+                        <span class="logo-bracket">[</span>
+                        <span class="logo-text">POP REDE</span>
+                        <span class="logo-bracket">]</span>
+                    </div>
+                    <div class="version-tag">v2.0.1-BR</div>
+                </div>
+                <div class="header-center">
+                    <h1 class="main-title">
+                        <span class="title-prefix">///</span>
+                        SISTEMA DE ANÁLISE RTP
+                        <span class="title-suffix">///</span>
+                    </h1>
+                    <div class="subtitle">RASTREAMENTO EM TEMPO REAL</div>
+                </div>
+                <div class="header-right">
+                    <div class="system-info">
+                        <div class="info-item">
+                            <span class="info-label">UPTIME:</span>
+                            <span class="info-value" id="systemUptime">00:00:00</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">HORA:</span>
+                            <span class="info-value" id="systemTime">00:00:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- System Console -->
+            <section class="console-section">
+                <div class="console-window">
+                    <div class="console-header">
+                        <div class="console-title">
+                            <span class="console-icon">▶</span>
+                            CONSOLE DO SISTEMA
+                        </div>
+                        <div class="console-controls">
+                            <span class="control-dot control-minimize"></span>
+                            <span class="control-dot control-maximize"></span>
+                            <span class="control-dot control-close"></span>
+                        </div>
+                    </div>
+                    <div class="console-body">
+                        <div class="console-line">
+                            <span class="console-prompt">[SISTEMA]</span>
+                            <span class="console-text">Inicializando módulos RTP...</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[DATABASE]</span>
+                            <span class="console-text">Conectado ao servidor</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[SYNC]</span>
+                            <span class="console-text">Sincronização habilitada</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[RTP]</span>
+                            <span class="console-text">Sistema ativo</span>
+                            <span class="console-status console-active">● ATIVO</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Window Timer -->
+            <section class="timer-section">
+                <div class="timer-container">
+                    <div class="timer-header">
+                        <div class="timer-label">
+                            <span class="timer-icon">⏱</span>
+                            JANELA DE ATUALIZAÇÃO
+                        </div>
+                        <div class="timer-cycle" id="cycleCount">CICLO #1</div>
+                    </div>
+                    <div class="timer-display" id="countdownTimer">
+                        <span class="timer-minutes" id="timerMinutes">09</span>
+                        <span class="timer-separator">:</span>
+                        <span class="timer-seconds" id="timerSeconds">45</span>
+                    </div>
+                    <div class="timer-progress">
+                        <div class="timer-progress-bar" id="timerProgressBar"></div>
+                        <div class="timer-progress-text">
+                            <span>INÍCIO</span>
+                            <span id="progressPercent">75%</span>
+                            <span>PRÓXIMO</span>
+                        </div>
+                    </div>
+                    <div class="timer-info">
+                        <span class="info-dot"></span>
+                        Recalculado a cada 3 minutos
+                    </div>
+                </div>
+            </section>
+
+            <!-- Banner Carousel -->
+            <section class="banner-carousel">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-icon">▶</span>
+                        <span class="section-text">CAMPANHAS</span>
+                    </div>
+                    <div class="section-badge">ATIVO</div>
+                </div>
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        <div class="carousel-slide">
+                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 1">
+                            <div class="carousel-overlay"></div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 2">
+                            <div class="carousel-overlay"></div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 3">
+                            <div class="carousel-overlay"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="carousel-btn carousel-btn-prev" id="prevBtn">
+                        <span>‹</span>
+                    </button>
+                    <button class="carousel-btn carousel-btn-next" id="nextBtn">
+                        <span>›</span>
+                    </button>
+                    
+                    <div class="carousel-dots" id="carouselDots">
+                        <span class="dot active" data-slide="0"></span>
+                        <span class="dot" data-slide="1"></span>
+                        <span class="dot" data-slide="2"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Provider Filter -->
+            <section class="provider-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-icon">◉</span>
+                        <span class="section-text">FILTRO</span>
+                    </div>
+                    <div class="section-stats">
+                        <span class="stats-value" id="displayedGames">0</span>
+                        <span class="stats-separator">/</span>
+                        <span class="stats-total" id="totalGames">623</span>
+                    </div>
+                </div>
+                
+                <button class="provider-selector" id="hamburgerBtn">
+                    <span class="selector-icon">▼</span>
+                    <span class="selector-name" id="currentProviderName">TODOS</span>
+                    <span class="selector-count" id="currentProviderCount">[623]</span>
+                    <span class="selector-status">●</span>
+                </button>
+                
+                <div class="provider-menu" id="providerMenu">
+                    <div class="provider-menu-header">
+                        <span class="menu-icon">►</span>
+                        SELECIONE O PROVEDOR
+                    </div>
+                    <button class="provider-item active" data-provider="all">
+                        <span class="provider-indicator">●</span>
+                        <span class="provider-text">TODOS</span>
+                        <span class="provider-game-count">[623]</span>
+                        <span class="provider-arrow">→</span>
+                    </button>
+                    <button class="provider-item" data-provider="PG SOFT">
+                        <span class="provider-indicator">●</span>
+                        <span class="provider-text">PG SOFT</span>
+                        <span class="provider-game-count">[84]</span>
+                        <span class="provider-arrow">→</span>
+                    </button>
+                    <button class="provider-item" data-provider="Pragmatic Play">
+                        <span class="provider-indicator">●</span>
+                        <span class="provider-text">PRAGMATIC</span>
+                        <span class="provider-game-count">[156]</span>
+                        <span class="provider-arrow">→</span>
+                    </button>
+                    <button class="provider-item" data-provider="Play N' GO">
+                        <span class="provider-indicator">●</span>
+                        <span class="provider-text">PLAY N' GO</span>
+                        <span class="provider-game-count">[118]</span>
+                        <span class="provider-arrow">→</span>
+                    </button>
+                    <button class="provider-item" data-provider="Playtech">
+                        <span class="provider-indicator">●</span>
+                        <span class="provider-text">PLAYTECH</span>
+                        <span class="provider-game-count">[90]</span>
+                        <span class="provider-arrow">→</span>
+                    </button>
+                    <button class="provider-item" data-provider="HACKSAW">
+                        <span class="provider-indicator">●</span>
+                        <span class="provider-text">HACKSAW</span>
+                        <span class="provider-game-count">[118]</span>
+                        <span class="provider-arrow">→</span>
+                    </button>
+                    <button class="provider-item" data-provider="TADA">
+                        <span class="provider-indicator">●</span>
+                        <span class="provider-text">TADAJILI</span>
+                        <span class="provider-game-count">[57]</span>
+                        <span class="provider-arrow">→</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Games Grid -->
+            <section class="games-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-icon">◉</span>
+                        <span class="section-text">DATABASE</span>
+                    </div>
+                    <div class="section-refresh" id="lastRefresh">
+                        <span class="refresh-icon">↻</span>
+                        <span class="refresh-text">--:--</span>
+                    </div>
+                </div>
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Games loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Sticky Action Button -->
+    <button class="action-button" id="stickyRegisterBtn">
+        <span class="action-icon">►</span>
+        <span class="action-text">CONECTAR</span>
+        <span class="action-pulse"></span>
+    </button>
+
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="popupOverlay">
+        <div class="modal-container">
+            <button class="modal-close" id="popupClose">
+                <span>×</span>
+            </button>
+            
+            <div class="modal-header">
+                <div class="modal-terminal">
+                    <span class="terminal-prompt-modal">root@poprede:~$</span>
+                    <span class="terminal-command-modal">./connect</span>
+                </div>
+                <div class="modal-title">
+                    <span class="modal-bracket">[</span>
+                    CONEXÃO
+                    <span class="modal-bracket">]</span>
+                </div>
+                <div class="modal-subtitle">
+                    <span class="modal-icon">►</span>
+                    SELECIONE SUA PLATAFORMA
+                </div>
+            </div>
+            
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <span class="stat-label">PLATAFORMAS:</span>
+                    <span class="stat-value">17</span>
+                </div>
+                <div class="modal-stat">
+                    <span class="stat-label">STATUS:</span>
+                    <span class="stat-value stat-online">ONLINE</span>
+                </div>
+            </div>
+
+            <div class="modal-grid" id="popupButtons">
+                <!-- Platform cards will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="game-data.js"></script>
+    <script src="provider_image_lists.js" onerror="console.log('Modo dinâmico')"></script>
+    <script src="game_popularity.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
