@@ -155,11 +155,17 @@ let cycleCount = 1;
 
 function getTimeSeed() {
     const now = new Date();
+    const currentMinute = now.getMinutes();
+    const roundedMinute = Math.floor(currentMinute / 3) * 3;
     const totalMinutes = now.getFullYear() * 525600 +
                         now.getMonth() * 43800 +
                         now.getDate() * 1440 +
                         now.getHours() * 60 +
-                        Math.floor(now.getMinutes() / 3) * 3;
+                        roundedMinute;
+    
+    // Debug logging to track seed changes
+    console.log(`🕐 TimeSeed Debug: Minuto=${currentMinute}, Arredondado=${roundedMinute}, Seed=${totalMinutes}`);
+    
     return totalMinutes;
 }
 
@@ -359,24 +365,37 @@ function updateCountdownTimer() {
 
 function startCountdownTimer() {
     updateCountdownTimer();
+    
+    let lastUpdateMinute = -1; // Track the last minute we updated
+    
     setInterval(() => {
         updateCountdownTimer();
         
-        const ms = getTimeUntilNextUpdate();
-        if (ms < 1000) {
-            const currentTimeSeed = getTimeSeed();
-            console.log('═══════════════════════════════════════');
-            console.log('🔄 ATUALIZAÇÃO DE RTP INICIADA');
-            console.log(`⏰ TimeSeed NOVO: ${currentTimeSeed}`);
-            console.log('🎮 Recalculando RTP de TODOS os jogos...');
-            console.log('═══════════════════════════════════════');
+        const now = new Date();
+        const currentMinute = now.getMinutes();
+        const currentThreeMinuteBlock = Math.floor(currentMinute / 3) * 3;
+        
+        // Only trigger update when we enter a new 3-minute block
+        if (currentThreeMinuteBlock !== lastUpdateMinute && currentMinute % 3 === 0) {
+            lastUpdateMinute = currentThreeMinuteBlock;
             
-            renderGameCards();
-            updateSyncStatus();
-            updateCycleCount();
-            updateLastRefresh();
-            
-            console.log('✅ RTP atualizado! Valores devem estar DIFERENTES agora.');
+            // Add small delay to ensure we're fully in the new minute
+            setTimeout(() => {
+                const currentTimeSeed = getTimeSeed();
+                console.log('═══════════════════════════════════════');
+                console.log('🔄 ATUALIZAÇÃO DE RTP INICIADA');
+                console.log(`⏰ TimeSeed NOVO: ${currentTimeSeed}`);
+                console.log(`📅 Minuto atual: ${now.getMinutes()}, Bloco: ${currentThreeMinuteBlock}`);
+                console.log('🎮 Recalculando RTP de TODOS os jogos...');
+                console.log('═══════════════════════════════════════');
+                
+                renderGameCards();
+                updateSyncStatus();
+                updateCycleCount();
+                updateLastRefresh();
+                
+                console.log('✅ RTP atualizado! Valores devem estar DIFERENTES agora.');
+            }, 100); // 100ms delay to ensure we're in the new minute
         }
     }, 100);
 }
