@@ -27,6 +27,7 @@
 
   gtag('config', 'G-PV01P9NMZL');
 </script>
+
 <body>
     <!-- Terminal Background Effect -->
     <div class="terminal-bg">
@@ -103,71 +104,38 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Wrapper baru untuk banner dan timer -->
-            <div class="banner-timer-container">
-                <!-- Data Window Timer (Kiri) -->
-                <section class="timer-section">
-                    <div class="timer-container">
-                        <div class="timer-display" id="countdownTimer">
-                            <span class="timer-minutes" id="timerMinutes">09</span>
-                            <span class="timer-separator">:</span>
-                            <span class="timer-seconds" id="timerSeconds">45</span>
+            <!-- Banner Carousel -->
+            <section class="banner-carousel">
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        <div class="carousel-slide">
+                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 1">
+                            <div class="carousel-overlay"></div>
                         </div>
-                        <div class="timer-progress">
-                            <div class="timer-progress-bar" id="timerProgressBar"></div>
-                            <div class="timer-progress-text">
-                                <span>INÍCIO</span>
-                                <span id="progressPercent">75%</span>
-                                <span>PRÓXIMO</span>
-                            </div>
+                        <div class="carousel-slide">
+                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 2">
+                            <div class="carousel-overlay"></div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 3">
+                            <div class="carousel-overlay"></div>
                         </div>
                     </div>
-                </section>
-
-                <!-- Banner Carousel (Kanan) -->
-                <section class="banner-carousel">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <span class="section-icon">◉</span>
-                            <span class="section-text">FILTRO</span>
-                        </div>
-                        <div class="section-stats">
-                            <span class="stats-value" id="displayedGames">0</span>
-                            <span class="stats-separator">/</span>
-                            <span class="stats-total" id="totalGames">623</span>
-                        </div>
+                    
+                    <button class="carousel-btn carousel-btn-prev" id="prevBtn">
+                        <span>‹</span>
+                    </button>
+                    <button class="carousel-btn carousel-btn-next" id="nextBtn">
+                        <span>›</span>
+                    </button>
+                    
+                    <div class="carousel-dots" id="carouselDots">
+                        <span class="dot active" data-slide="0"></span>
+                        <span class="dot" data-slide="1"></span>
+                        <span class="dot" data-slide="2"></span>
                     </div>
-                    <div class="carousel-container">
-                        <div class="carousel-track" id="carouselTrack">
-                            <div class="carousel-slide">
-                                <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 1">
-                                <div class="carousel-overlay"></div>
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 2">
-                                <div class="carousel-overlay"></div>
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="asset/banner/SLIDING EXAMPLE 1.png" alt="Banner 3">
-                                <div class="carousel-overlay"></div>
-                            </div>
-                        </div>
-                        
-                        <button class="carousel-btn carousel-btn-prev" id="prevBtn">
-                            <span>‹</span>
-                        </button>
-                        <button class="carousel-btn carousel-btn-next" id="nextBtn">
-                            <span>›</span>
-                        </button>
-                        
-                        <div class="carousel-dots" id="carouselDots">
-                            <span class="dot active" data-slide="0"></span>
-                            <span class="dot" data-slide="1"></span>
-                            <span class="dot" data-slide="2"></span>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                </div>
+            </section>
 
             <!-- Provider Filter -->
             <section class="provider-section">
@@ -287,11 +255,18 @@
         </div>
     </main>
 
-    <!-- Sticky Action Button -->
-    <button class="action-button" id="stickyRegisterBtn">
-        <span class="action-icon">►</span>
-        <span class="action-text">CONECTAR</span>
-        <span class="action-pulse"></span>
+    <!-- Floating Timer Button -->
+    <button class="floating-timer-button" id="floatingTimerBtn">
+        <div class="floating-timer-text">CONNECTOR</div>
+        <div class="floating-timer-display">
+            <span class="floating-timer-minutes" id="floatingTimerMinutes">01</span>
+            <span class="floating-timer-separator">:</span>
+            <span class="floating-timer-seconds" id="floatingTimerSeconds">27</span>
+        </div>
+        <div class="floating-timer-progress">
+            <div class="floating-timer-progress-bar" id="floatingTimerProgressBar"></div>
+        </div>
+        <span class="floating-timer-pulse"></span>
     </button>
 
     <!-- Registration Modal -->
