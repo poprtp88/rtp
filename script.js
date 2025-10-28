@@ -334,7 +334,36 @@ function updateCountdownTimer() {
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
     
-    // Update floating timer button only (main timer removed)
+    const minutesEl = document.getElementById('timerMinutes');
+    const secondsEl = document.getElementById('timerSeconds');
+    const progressBar = document.getElementById('timerProgressBar');
+    const progressPercent = document.getElementById('progressPercent');
+    const nextUpdateEl = document.getElementById('nextUpdate');
+    
+    // Update main timer
+    if (minutesEl) {
+        minutesEl.textContent = minutes.toString().padStart(2, '0');
+    }
+    
+    if (secondsEl) {
+        secondsEl.textContent = seconds.toString().padStart(2, '0');
+    }
+    
+    if (progressBar) {
+        const progress = ((totalMs - ms) / totalMs) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
+    
+    if (progressPercent) {
+        const progress = Math.floor(((totalMs - ms) / totalMs) * 100);
+        progressPercent.textContent = `${progress}%`;
+    }
+    
+    if (nextUpdateEl) {
+        nextUpdateEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    // Update floating timer button
     const floatingMinutesEl = document.getElementById('floatingTimerMinutes');
     const floatingSecondsEl = document.getElementById('floatingTimerSeconds');
     const floatingProgressBar = document.getElementById('floatingTimerProgressBar');
