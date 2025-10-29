@@ -263,12 +263,13 @@ body {
     border: 1px solid var(--accent-cyan);
     color: var(--accent-cyan);
     padding: 3px 8px;
-    border-radius: 4px;
+    border-radius: 2px;
     font-size: 9px;
     font-family: var(--font-mono);
     font-weight: 700;
     margin-right: -49px;
     margin-left: 71px;
+    position: relative;
 }
 
 .header-center {
@@ -800,7 +801,7 @@ body {
    ============================================ */
 
 .provider-section {
-    margin-bottom: -20px;
+    margin-bottom: -10px;
 }
 
 .provider-selector {
