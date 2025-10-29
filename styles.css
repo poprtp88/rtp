@@ -1145,6 +1145,67 @@ body {
 .icon-cross { color: var(--accent-red); opacity: 0.5; }
 
 /* ============================================
+   FLOATING TELEGRAM ICON (mobile-first)
+   ============================================ */
+
+.floating-telegram {
+    position: fixed;
+    right: 12px;
+    bottom: calc(96px + env(safe-area-inset-bottom)); /* keep above floating timer */
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #229ed9, #0088cc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    box-shadow: 0 6px 22px rgba(0, 136, 204, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.floating-telegram:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 28px rgba(0, 136, 204, 0.55);
+}
+
+.floating-telegram:active {
+    transform: scale(0.96);
+}
+
+.telegram-icon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
+}
+
+/* Very short screens: tuck closer to bottom */
+@media (max-height: 640px) {
+    .floating-telegram {
+        bottom: calc(76px + env(safe-area-inset-bottom));
+        width: 46px;
+        height: 46px;
+    }
+    .telegram-icon { width: 24px; height: 24px; }
+}
+
+/* Tablets+ can float mid-right if space allows */
+@media (min-width: 768px) and (min-height: 820px) {
+    .floating-telegram {
+        bottom: auto;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .floating-telegram:hover {
+        transform: translateY(-52%) scale(1.05);
+    }
+}
+
+/* ============================================
    FLOATING TIMER BUTTON - FUTURISTIC EFFECTS
    ============================================ */
 
