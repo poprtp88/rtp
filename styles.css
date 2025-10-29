@@ -1532,6 +1532,7 @@ body {
     
     .main-title {
         font-size: 22px;
+
     }
     
     .timer-display {
@@ -1704,5 +1705,8 @@ img, a {
     .header-left {
         justify-content: center;
         width: 100%;
+        margin-left: 30px;
+    
     }
 }
+
