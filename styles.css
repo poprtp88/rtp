@@ -272,13 +272,14 @@ body {
 .header-center {
     flex: 1;
     text-align: center;
-    min-width: 200px;
+    min-width: 180px;
+    padding: 0 10px;
 }
 
 .main-title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 900;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     background: linear-gradient(135deg, #00f0ff, #00ff88);
     -webkit-background-clip: text;
@@ -287,13 +288,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 2px;
     flex-wrap: wrap;
+    line-height: 1.2;
 }
 
 .title-prefix, .title-suffix {
     color: var(--accent-cyan);
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .subtitle {
@@ -1575,11 +1577,43 @@ body {
     }
     
     .main-title {
-        font-size: 14px;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        gap: 1px;
+    }
+    
+    .title-prefix, .title-suffix {
+        font-size: 10px;
+    }
+    
+    .subtitle {
+        font-size: 8px;
     }
     
     .timer-display {
         font-size: 64px;
+    }
+}
+
+/* Standard mobile phones (360px-479px) */
+@media (min-width: 360px) and (max-width: 479px) {
+    .main-title {
+        font-size: 13px;
+        letter-spacing: 0.8px;
+        gap: 1px;
+    }
+    
+    .title-prefix, .title-suffix {
+        font-size: 11px;
+    }
+    
+    .subtitle {
+        font-size: 8px;
+    }
+    
+    .header-center {
+        min-width: 160px;
+        padding: 0 8px;
     }
 }
 
@@ -1588,6 +1622,15 @@ body {
     .games-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 12px;
+    }
+    
+    .main-title {
+        font-size: 15px;
+        letter-spacing: 1.2px;
+    }
+    
+    .title-prefix, .title-suffix {
+        font-size: 13px;
     }
 }
 

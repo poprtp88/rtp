@@ -76,6 +76,35 @@
             <button onclick="simulateNextWindow()">Simulate Next 10-Min Window</button>
             <div id="testResults" style="margin-top: 15px;"></div>
         </div>
+
+        <div class="info">
+            <h2>🎬 Animation Controls</h2>
+            <button onclick="window.animationController?.startShrinkAnimation()">🔽 Shrink Interface</button>
+            <button onclick="window.animationController?.startExpandAnimation()">🔼 Expand Interface</button>
+            <button onclick="window.animationController?.startMorphAnimation()">🌀 Morph Animation</button>
+            <button onclick="window.animationController?.stopAllAnimations()">⏹️ Stop All</button>
+            <div style="margin-top: 10px; font-size: 12px; color: #7c4dff;">
+                💡 <strong>Tips:</strong><br>
+                • Click floating timer button for shrink animation<br>
+                • Double-click floating timer button for expand animation<br>
+                • Use Ctrl+S (shrink), Ctrl+E (expand), Ctrl+M (morph)<br>
+                • Animations auto-trigger periodically
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Timer Button -->
+    <div class="floating-timer-button" id="floatingTimer">
+        <div class="floating-timer-text">CONNECTOR</div>
+        <div class="floating-timer-display">
+            <span id="floatingMinutes">01</span>
+            <span class="floating-timer-separator">:</span>
+            <span id="floatingSeconds">08</span>
+        </div>
+        <div class="floating-timer-progress">
+            <div class="floating-timer-progress-bar" id="floatingProgressBar"></div>
+        </div>
+        <div class="floating-timer-pulse"></div>
     </div>
 
     <script>
@@ -197,6 +226,20 @@
             const seconds = Math.floor((ms % 60000) / 1000);
             document.getElementById('countdown').textContent = 
                 `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update floating timer
+            const floatingMinutes = document.getElementById('floatingMinutes');
+            const floatingSeconds = document.getElementById('floatingSeconds');
+            const floatingProgressBar = document.getElementById('floatingProgressBar');
+            
+            if (floatingMinutes) floatingMinutes.textContent = minutes.toString().padStart(2, '0');
+            if (floatingSeconds) floatingSeconds.textContent = seconds.toString().padStart(2, '0');
+            
+            // Update progress bar (10 minutes = 600000ms)
+            if (floatingProgressBar) {
+                const progress = ((600000 - ms) / 600000) * 100;
+                floatingProgressBar.style.width = Math.max(0, Math.min(100, progress)) + '%';
+            }
         }
 
         function refreshGames() {
@@ -369,6 +412,9 @@
             init();
         }
     </script>
+
+    <!-- Futuristic Animation Controller -->
+    <script src="animations.js"></script>
 </body>
 </html>
 
