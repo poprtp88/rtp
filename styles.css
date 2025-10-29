@@ -267,6 +267,8 @@ body {
     font-size: 9px;
     font-family: var(--font-mono);
     font-weight: 700;
+    margin-right: -49px;
+    margin-left: 71px;
 }
 
 .header-center {
@@ -1598,7 +1600,7 @@ body {
 /* Standard mobile phones (360px-479px) */
 @media (min-width: 360px) and (max-width: 479px) {
     .main-title {
-        font-size: 13px;
+        font-size: 16px;
         letter-spacing: 0.8px;
         gap: 1px;
     }
