@@ -1177,9 +1177,8 @@ body {
 }
 
 .telegram-icon {
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
     filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
 }
 
@@ -1190,7 +1189,7 @@ body {
         width: 46px;
         height: 46px;
     }
-    .telegram-icon { width: 24px; height: 24px; }
+    .telegram-icon { width: 100%; height: 100%; }
 }
 
 /* Tablets+ can float mid-right if space allows */
