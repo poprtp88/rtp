@@ -4,10 +4,10 @@
    ============================================ */
 
 :root {
-    /* Ultra Dark Color Palette */
-    --bg-primary: #000000;
+    /* Ultra Dark Color Palette - Deep Navy Blue Theme */
+    --bg-primary: #050a1e;
     --bg-secondary: #0a0e27;
-    --bg-tertiary: #111729;
+    --bg-tertiary: #0d1529;
     --bg-card: #0d1126;
     --bg-console: #000000;
     
@@ -50,7 +50,7 @@
 
 body {
     font-family: var(--font-primary);
-    background: var(--bg-primary);
+    background: linear-gradient(135deg, #030814 0%, #050a1e 50%, #0a0e27 100%);
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
@@ -156,6 +156,14 @@ body {
     gap: 15px;
 }
 
+/* Desktop: Center status bar elements */
+@media (min-width: 1024px) {
+    .system-status-bar {
+        justify-content: center;
+        gap: 40px;
+    }
+}
+
 .status-item {
     display: flex;
     align-items: center;
@@ -211,7 +219,16 @@ body {
     text-align: center;
     background: var(--bg-console);
     border-bottom: 1px solid var(--border-color);
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding-left: 15px;
+    padding-right: 15px;
 }
+
 
 .prompt-symbol {
     color: var(--accent-cyan);
@@ -462,11 +479,52 @@ body {
 }
 
 /* ============================================
+   BANNER AND TIMER WRAPPER
+   ============================================ */
+
+.banner-timer-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Desktop: Side by side layout */
+@media (min-width: 1024px) {
+    .banner-timer-wrapper {
+        flex-direction: row;
+        gap: 15px;
+        align-items: stretch;
+    }
+}
+
+/* ============================================
    TIMER SECTION
    ============================================ */
 
 .timer-section {
-    margin-bottom: 10px;
+    margin-bottom: 0;
+}
+
+/* Desktop: Timer takes 1 part (25% width) with 1:1 aspect ratio */
+@media (min-width: 1024px) {
+    .timer-section {
+        flex: 0 0 25%;
+        display: flex;
+    }
+    
+    .timer-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        aspect-ratio: 1 / 1;
+        padding-top: 15px;
+    }
+    
+    .timer-display {
+        font-size: 48px;
+    }
 }
 
 .timer-container {
@@ -478,8 +536,8 @@ body {
     box-shadow: var(--glow-cyan);
     position: relative;
     overflow: hidden;
-    margin-top: -10px;
-    padding-top: 5px; /* Reduced top padding to make container shorter */
+    margin-top: 0px;
+    padding-top: 0px; /* Reduced top padding to make container shorter */
 }
 
 .timer-container::before {
@@ -700,7 +758,7 @@ body {
    ============================================ */
 
 .banner-carousel {
-    margin-bottom: 10px;
+    padding-bottom: 0px;
 }
 
 .carousel-container {
@@ -711,6 +769,20 @@ body {
     border-radius: 10px;
     border: 2px solid var(--accent-cyan);
     box-shadow: var(--glow-cyan);
+    padding-right: -10px;
+    margin-right: -10px;
+}
+
+/* Desktop: Banner takes 3 parts (75% width) with 3:1 aspect ratio */
+@media (min-width: 1024px) {
+    .banner-carousel {
+        flex: 0 0 74%;
+    }
+    
+    .carousel-container {
+        height: auto;
+        aspect-ratio: 3 / 1;
+    }
 }
 
 .carousel-track {
@@ -728,7 +800,7 @@ body {
 .carousel-slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: stretch;
 }
 
 .carousel-overlay {
@@ -738,6 +810,7 @@ body {
     width: 100%;
     height: 100%;
     background: linear-gradient(180deg, transparent 60%, rgba(5, 10, 30, 0.9) 100%);
+    padding-right: -10px;
 }
 
 .carousel-btn {
@@ -1717,10 +1790,6 @@ body {
     .timer-display {
         font-size: 86px;
     }
-    
-    .carousel-container {
-        height: 220px;
-    }
 }
 
 /* Desktop */
@@ -1759,10 +1828,6 @@ body {
     
     .timer-display {
         font-size: 82px;
-    }
-    
-    .carousel-container {
-        height: 220px;
     }
 }
 
