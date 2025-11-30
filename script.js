@@ -107,7 +107,7 @@
 const CONFIG = {
     gamesPerProvider: 0, // 0 = mostrar todos
     rtpRanges: {
-        min: 30,
+        min: 85,
         max: 99
     },
     multipliers: [
