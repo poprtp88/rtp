@@ -746,12 +746,12 @@ function generatePlatformCards() {
         
         card.addEventListener('click', function(e) {
             e.preventDefault();
-
-                        // Disable click for specific IDs
+            
+            // Disable click for specific IDs
             if (platform.id === 3 || platform.id === 14) {
                 return;
             }
-            
+
             const url = this.getAttribute('data-url');
             
             console.log(`🔗 Abrindo plataforma: ${url}`);
