@@ -122,11 +122,11 @@ const CONFIG = {
         { value: '20X', type: 'high' }
     ],
     platforms: [
-        { id: 1, url: 'https://popbra.com/#/register?r_code=255862939718' },
-        { id: 2, url: 'https://poplud.com?ch=30282' },
-        { id: 3, url: 'https://9zqllv.com?ch=17356' },
-        { id: 4, url: 'https://popx5t.com?ch=13250' },
-        { id: 5, url: 'https://poppg.com/#/register?r_code=87311374506' },
+        { id: 1, url: 'https://popduqo.com?ch=23890' },
+        { id: 2, url: 'https://popx5t.com?ch=13250' },
+        { id: 3, url: 'BELOM ADA' }, // POPN1
+        { id: 4, url: 'https://popbra.com/#/register?r_code=255862939718' },
+        { id: 5, url: 'https://pop555.com/#/register?r_code=27363421531' },
         { id: 6, url: 'https://www.popbem66.com/#/register?r_code=62548100237' },
         { id: 7, url: 'https://poplua1.com/#/register?r_code=18527100158' },
         { id: 8, url: 'https://popkkk.com?code=252596' },
@@ -135,11 +135,10 @@ const CONFIG = {
         { id: 11, url: 'https://26bet.com/?id=911719620' },
         { id: 12, url: 'https://poppg.com/#/register?r_code=87311374506' },
         { id: 13, url: 'https://q5gdw6.com?ch=2291' },
-        { id: 14, url: 'https://platform14.com' }, //MISSING 
+        { id: 14, url: 'BELOM ADA' }, // POPDEZ
         { id: 15, url: 'https://9zqllv.com?ch=17356' },
         { id: 16, url: 'https://popceu.com/#/register?r_code=46223100109' },
-        { id: 17, url: 'https://platform17.com' }, //missing popn1
-        { id: 18, url: 'https://popduqo.com?ch=23890' }
+        { id: 17, url: 'https://poplud.com?ch=30282' }, 
     ]
 };
 
@@ -538,8 +537,13 @@ function createGameCard(game, index) {
         </div>
         <div class="game-info">
             <div class="game-rtp-container">
-                <span class="rtp-label">RTP</span>
-                <span class="rtp-value rtp-${colorClass}">${rtp}%</span>
+                <div class="rtp-text-row">
+                    <span class="rtp-label">RTP</span>
+                    <span class="rtp-value rtp-${colorClass}">${rtp}%</span>
+                </div>
+                <div class="rtp-bar-container">
+                    <div class="rtp-bar-fill rtp-fill-${colorClass}" style="width: ${rtp}%"></div>
+                </div>
             </div>
         </div>
     `;
@@ -684,13 +688,20 @@ function generatePlatformCards() {
     
     modalGrid.innerHTML = '';
     
-    CONFIG.platforms.forEach(platform => {
+    CONFIG.platforms.forEach((platform, index) => {
         const card = document.createElement('a');
         card.href = '#';
-        card.className = 'platform-card';
+        
+        // Add special class for the first platform (Gold/Hot)
+        const isGold = index === 0;
+        card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
+        
         card.setAttribute('data-url', platform.url);
         
+        const hotBadge = isGold ? '<div class="platform-hot">HOT</div>' : '';
+        
         card.innerHTML = `
+            ${hotBadge}
             <div class="platform-overlay"></div>
             <img src="asset/${platform.id}.png" alt="Plataforma ${platform.id}" />
             <div class="platform-status">

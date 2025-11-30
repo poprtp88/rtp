@@ -1150,12 +1150,19 @@ body {
 
 .game-rtp-container {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column; /* Changed from row to column to stack text and bar */
     background: var(--bg-console);
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 8px 10px;
+    gap: 4px; /* Added gap between text row and bar */
+}
+
+.rtp-text-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .rtp-label {
@@ -1675,6 +1682,98 @@ body {
     background: var(--bg-console);
     border-radius: 50%;
     animation: pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   PLATFORM GOLD & HOT BADGE
+   ============================================ */
+.platform-gold {
+    border-color: #FFD700 !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.platform-gold::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255, 215, 0, 0.4) 50%,
+        transparent 100%
+    );
+    transform: skewX(-25deg);
+    animation: shine-sweep 3s infinite linear;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes shine-sweep {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+}
+
+.platform-hot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: linear-gradient(135deg, #FFD700, #FFAA00);
+    color: #000;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2px 8px;
+    border-bottom-left-radius: 8px;
+    z-index: 3;
+    box-shadow: -2px 2px 5px rgba(0,0,0,0.5);
+    font-family: var(--font-primary);
+    animation: pulse-gold 2s infinite;
+}
+
+@keyframes pulse-gold {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* ============================================
+   RTP PROGRESS BAR
+   ============================================ */
+.rtp-bar-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 2px;
+    margin-top: 0; /* Removed margin since it's now inside the flex container with gap */
+    overflow: hidden;
+    position: relative;
+}
+
+.rtp-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease-out;
+    box-shadow: 0 0 5px currentColor;
+    position: relative;
+}
+
+.rtp-fill-high {
+    background: var(--accent-green);
+    color: var(--accent-green);
+}
+
+.rtp-fill-medium {
+    background: var(--accent-yellow);
+    color: var(--accent-yellow);
+}
+
+.rtp-fill-low {
+    background: var(--accent-red);
+    color: var(--accent-red);
 }
 
 /* ============================================
