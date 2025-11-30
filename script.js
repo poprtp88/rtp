@@ -149,6 +149,10 @@ let allGames = [];
 let systemStartTime = Date.now();
 let cycleCount = 1;
 
+// Pagination Settings
+const GAMES_PER_PAGE = 100;
+let visibleLimit = GAMES_PER_PAGE;
+
 // ============================================
 // FUNÇÕES UTILITÁRIAS
 // ============================================
@@ -557,10 +561,15 @@ function createGameCard(game, index) {
 
 function renderGameCards() {
     const gamesGrid = document.getElementById('gamesGrid');
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const remainingCountEl = document.getElementById('remainingGamesCount');
+    
     if (!gamesGrid) return;
     
     const filteredGames = filterGamesByProvider(currentProvider);
-    const gamesToDisplay = filteredGames;
+    // Apply pagination limit
+    const gamesToDisplay = filteredGames.slice(0, visibleLimit);
     
     // Add pulse animation to grid on refresh
     gamesGrid.classList.add('refreshing');
@@ -575,7 +584,29 @@ function renderGameCards() {
         gamesGrid.appendChild(card);
     });
     
+    // Handle Load More Button Visibility
+    if (loadMoreContainer && remainingCountEl) {
+        if (filteredGames.length > visibleLimit) {
+            loadMoreContainer.style.display = 'flex';
+            const remaining = filteredGames.length - visibleLimit;
+            remainingCountEl.textContent = `+${remaining}`;
+        } else {
+            loadMoreContainer.style.display = 'none';
+        }
+    }
+    
     updateGameCounter(gamesToDisplay.length, filteredGames.length);
+}
+
+function setupLoadMore() {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            visibleLimit += GAMES_PER_PAGE;
+            renderGameCards();
+            console.log(`📥 Carregando mais jogos... Limite atual: ${visibleLimit}`);
+        });
+    }
 }
 
 function updateGameCounter(displayed, total) {
@@ -652,6 +683,9 @@ function setupProviderMenu() {
         item.addEventListener('click', function() {
             const provider = this.getAttribute('data-provider');
             currentProvider = provider;
+            
+            // Reset pagination when changing filters
+            visibleLimit = GAMES_PER_PAGE;
             
             providerItems.forEach(i => i.classList.remove('active'));
             this.classList.add('active');
@@ -815,6 +849,7 @@ async function init() {
     setupCarousel();
     setupProviderMenu();
     setupPlatformModal();
+    setupLoadMore();
     
     // Iniciar monitores do sistema
     updateSystemTime();
