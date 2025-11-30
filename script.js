@@ -122,23 +122,24 @@ const CONFIG = {
         { value: '20X', type: 'high' }
     ],
     platforms: [
-        { id: 1, url: 'https://platform1.com' },
-        { id: 2, url: 'https://platform2.com' },
-        { id: 3, url: 'https://platform3.com' },
-        { id: 4, url: 'https://platform4.com' },
-        { id: 5, url: 'https://platform5.com' },
-        { id: 6, url: 'https://platform6.com' },
-        { id: 7, url: 'https://platform7.com' },
-        { id: 8, url: 'https://platform8.com' },
-        { id: 9, url: 'https://platform9.com' },
-        { id: 10, url: 'https://platform10.com' },
-        { id: 11, url: 'https://platform11.com' },
-        { id: 12, url: 'https://platform12.com' },
-        { id: 13, url: 'https://platform13.com' },
-        { id: 14, url: 'https://platform14.com' },
-        { id: 15, url: 'https://platform15.com' },
-        { id: 16, url: 'https://platform16.com' },
-        { id: 17, url: 'https://platform17.com' }
+        { id: 1, url: 'https://popbra.com/#/register?r_code=255862939718' },
+        { id: 2, url: 'https://poplud.com?ch=30282' },
+        { id: 3, url: 'https://9zqllv.com?ch=17356' },
+        { id: 4, url: 'https://popx5t.com?ch=13250' },
+        { id: 5, url: 'https://poppg.com/#/register?r_code=87311374506' },
+        { id: 6, url: 'https://www.popbem66.com/#/register?r_code=62548100237' },
+        { id: 7, url: 'https://poplua1.com/#/register?r_code=18527100158' },
+        { id: 8, url: 'https://popkkk.com?code=252596' },
+        { id: 9, url: 'https://pop678.com/#/register?r_code=84733330283' },
+        { id: 10, url: 'https://pop888.com/#/register?r_code=82225748475' },
+        { id: 11, url: 'https://26bet.com/?id=911719620' },
+        { id: 12, url: 'https://poppg.com/#/register?r_code=87311374506' },
+        { id: 13, url: 'https://q5gdw6.com?ch=2291' },
+        { id: 14, url: 'https://platform14.com' }, //MISSING 
+        { id: 15, url: 'https://9zqllv.com?ch=17356' },
+        { id: 16, url: 'https://popceu.com/#/register?r_code=46223100109' },
+        { id: 17, url: 'https://platform17.com' }, //missing popn1
+        { id: 18, url: 'https://popduqo.com?ch=23890' }
     ]
 };
 
@@ -704,10 +705,8 @@ function generatePlatformCards() {
             
             console.log(`🔗 Abrindo plataforma: ${url}`);
             
-            // Descomentar para ativar redirecionamento real
-            // window.open(url, '_blank');
-            
-            alert(`Plataforma: ${platform.id}\nURL: ${url}\n\nDescomentar código no script.js para ativar redirecionamento`);
+            // Redirecionamento ativado
+            window.open(url, '_blank');
         });
         
         modalGrid.appendChild(card);
