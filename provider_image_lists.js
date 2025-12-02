@@ -208,8 +208,7 @@ const PROVIDER_IMAGES = {
         "f8851c0c514b0ae10397f841dfd2b54f563dfd032a5bb23ed06294a3cadf3488.jpg",
         "f90bde94d4c692be0656cb87f4a5b8f5aefae22994a9692bee7d27b752dc9b75.jpg",
         "fd2b972e7879166ad09cd693a58ead3b062d5c1b7e598e39670b07729dac90ea.jpg",
-        "fda969baceb517b392506ce27e181e3f27a7a093c906e6a2b2080ea14eb9cde1.jpg",
-        "stake-com-production_1.jpg"
+        "fda969baceb517b392506ce27e181e3f27a7a093c906e6a2b2080ea14eb9cde1.jpg"
     ],
     "Pragmatic Play": [
         "01eb804c6f183be20037c9c767a8552f5c01a31351017717d7a49de4b4d43844.jpg",
@@ -366,8 +365,7 @@ const PROVIDER_IMAGES = {
         "fb17464538c19b76e9b501e8bb3bcfe787643779a5059d788141d6d21f736400.jpg",
         "fbd7a2ba07635bf8178c91c910f92d85ffa4fd4320a52885e7f6d005e872b8a6.jpg",
         "fc3a732b64a73b0011a0e55def22bb91de90bddf3637f5aad383fd30e47b1fa8.jpg",
-        "fe8a138599e05331809e86bc4b7856e930ab799d08ba3fe3a982d0c4920e64a2.jpg",
-        "stake-com-production.jpg"
+        "fe8a138599e05331809e86bc4b7856e930ab799d08ba3fe3a982d0c4920e64a2.jpg"
     ],
     "Playtech": [
         "-057443b7058fe3036007bae09233619f.png",
@@ -458,8 +456,7 @@ const PROVIDER_IMAGES = {
         "f5a6160ac63347e6d2b05549024e965e-n.png",
         "f7a5935512dbe401f37b7343bb1e03a3-n.png",
         "fa59f6152656b9d2f3c203b70befbb6e-n.png",
-        "fc5d1bccd9f2a01e571b8d0ad7b2db8d-n.png",
-        "ff75e6c979c4c3a0c8b20b35d399c13a-n.png"
+        "fc5d1bccd9f2a01e571b8d0ad7b2db8d-n.png"
     ],
     "Play N' GO": [
         "017cec0df3977caafb70cb71d1de88d10d7491619f6677a1771891c7f8f853ff.jpg",
@@ -578,8 +575,7 @@ const PROVIDER_IMAGES = {
         "f2e7ba1c6537963448788f8b8d16293ca988dd674354f699af9cc7ab3bbfc751.jpg",
         "f9a8e77f84e1f93c4561960033fcf226e34838e9c1738519c73e7fdfcbc2a358.jpg",
         "f9c4f09941dc223b59531006e3e416799a8aa4a65d8a8d25fea1200a2ef1c78b.jpg",
-        "fbdd19d6127f96b23ebbfb0c8bac465332468abb7b01b8ec48f14004d5ef7d3e.jpg",
-        "stake-com-production.jpg"
+        "fbdd19d6127f96b23ebbfb0c8bac465332468abb7b01b8ec48f14004d5ef7d3e.jpg"
     ],
     "TADA": [
         "-02f4ca5eee67b3af625e5da6971bbc43.png",
