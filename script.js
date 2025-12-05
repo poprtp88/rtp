@@ -663,6 +663,69 @@ function setupCarousel() {
 }
 
 // ============================================
+// SIDE BANNER CAROUSEL (DESKTOP TIMER SPLIT)
+// ============================================
+
+/**
+ * Initializes the side banner carousel for desktop timer split view.
+ * Auto-rotates slides and allows dot navigation.
+ */
+function setupSideBannerCarousel() {
+    const track = document.getElementById('sideBannerTrack');
+    const dots = document.querySelectorAll('.side-dot');
+    
+    // Exit if elements not found (e.g., on mobile where they don't exist)
+    if (!track) return;
+    
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.side-banner-slide');
+    const totalSlides = slides.length;
+    
+    if (totalSlides === 0) return;
+    
+    /**
+     * Updates the carousel position and active dot indicator
+     */
+    function updateSideBanner() {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update slides active state
+        slides.forEach((slide, index) => {
+            slide.classList.toggle('active', index === currentSlide);
+        });
+        
+        // Update dots active state
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+    }
+    
+    /**
+     * Advances to next slide with wraparound
+     */
+    function nextSideBannerSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSideBanner();
+    }
+    
+    // Setup dot click handlers for manual navigation
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            updateSideBanner();
+        });
+    });
+    
+    // Auto-rotate every 4 seconds (faster than main carousel)
+    setInterval(nextSideBannerSlide, 4000);
+    
+    // Initial update
+    updateSideBanner();
+    
+    console.log('✅ Side banner carousel inicializado');
+}
+
+// ============================================
 // MENU DE PROVEDORES
 // ============================================
 
@@ -848,6 +911,7 @@ async function init() {
     
     // Inicializar todos os sistemas
     setupCarousel();
+    setupSideBannerCarousel();
     setupProviderMenu();
     setupPlatformModal();
     setupLoadMore();

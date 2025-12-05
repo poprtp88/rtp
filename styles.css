@@ -557,6 +557,7 @@ body {
         flex-direction: row;
         gap: 15px;
         align-items: stretch;
+        height: 280px;
     }
 }
 
@@ -568,11 +569,112 @@ body {
     margin-bottom: 0;
 }
 
-/* Desktop: Timer takes 1 part (25% width) with 1:1 aspect ratio */
+/* Timer Split Wrapper - Side by side on all screens */
+.timer-split-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================
+   ANIMATED GRADIENT BORDER - @property method
+   ============================================ */
+
+/* Define custom property for gradient angle animation */
+@property --border-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+/* Side Banner Container - Disco Neon Snake Border Effect */
+.side-banner-container {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    border-radius: 10px;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    
+    /* The animated gradient border */
+    --border-angle: 0deg;
+    border: 3px solid transparent;
+    background: 
+        linear-gradient(var(--bg-secondary), var(--bg-tertiary)) padding-box,
+        conic-gradient(from var(--border-angle), #ffd700, #b800ff, #ffd700, #b800ff, #ffd700) border-box;
+    animation: snakeRotate 3s linear infinite;
+}
+
+/* Glow effect */
+.side-banner-container::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 14px;
+    background: conic-gradient(from var(--border-angle), #ffd700, #b800ff, #ffd700, #b800ff, #ffd700);
+    filter: blur(12px);
+    opacity: 0.6;
+    z-index: -1;
+    animation: snakeRotate 3s linear infinite;
+}
+
+@keyframes snakeRotate {
+    to {
+        --border-angle: 360deg;
+    }
+}
+
+/* Inner content wrapper */
+.side-banner-carousel {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border-radius: 7px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Side Banner Link - Clickable hover effects */
+.side-banner-link:hover {
+    transform: scale(1.02);
+    animation: snakeRotate 1.5s linear infinite;
+}
+
+.side-banner-link:hover::before {
+    opacity: 0.9;
+    filter: blur(15px);
+    animation: snakeRotate 1.5s linear infinite;
+}
+
+.side-banner-link:active {
+    transform: scale(0.98);
+}
+
+/* Mobile: Timer container takes half width and centers content */
+.timer-section .timer-container {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Desktop: Timer takes 1 part (25% width) with split layout */
 @media (min-width: 1024px) {
     .timer-section {
         flex: 0 0 25%;
         display: flex;
+    }
+    
+    .timer-split-wrapper {
+        flex-direction: column;
+        height: 100%;
     }
     
     .timer-container {
@@ -580,12 +682,18 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        aspect-ratio: 1 / 1;
+        flex: 1;
         padding-top: 15px;
     }
     
     .timer-display {
-        font-size: 48px;
+        font-size: 42px;
+    }
+    
+    /* Side Banner - Full width in column layout on desktop */
+    .side-banner-container {
+        width: 100%;
+        flex: 1;
     }
 }
 
@@ -593,7 +701,7 @@ body {
     background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
     border: 2px solid var(--accent-cyan);
     border-radius: 10px;
-    padding: 0px 15px; 
+    padding: 0px 0px; 
     text-align: center;
     box-shadow: var(--glow-cyan);
     position: relative;
@@ -652,8 +760,8 @@ body {
 
 .timer-display {
     font-family: var(--font-mono);
-    /* Increased font size for better visibility */
-    font-size: 56px;
+    /* Mobile: Smaller font for side-by-side layout */
+    font-size: 36px;
     font-weight: 700;
     color: var(--accent-green);
     text-shadow: var(--glow-green);
@@ -661,7 +769,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 2px; /* Reduced gap between numbers and separator */
-    margin-top: -15px; /* Reduced top margin to make container shorter */
+    margin-top: -10px; /* Reduced top margin to make container shorter */
     margin-bottom: -5px; /* Reduced bottom margin */
 }
 
@@ -677,6 +785,7 @@ body {
 .timer-progress {
     width: 100%;
     margin-bottom: 5px; /* Reduced bottom margin to make container shorter */
+    padding: 0 10px;
 }
 
 /* Adjust progress bar to be thinner */
@@ -816,6 +925,83 @@ body {
 }
 
 /* ============================================
+   SIDE BANNER CAROUSEL (DESKTOP TIMER SPLIT)
+   ============================================ */
+
+/* Note: .side-banner-carousel is styled above in the snake border section */
+
+.side-banner-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 0;
+}
+
+.side-banner-slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.side-banner-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.side-banner-slide.active {
+    display: flex;
+}
+
+/* Side Banner Dots */
+.side-banner-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.side-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.side-dot.active {
+    background: var(--accent-cyan);
+    box-shadow: var(--glow-cyan);
+    width: 16px;
+    border-radius: 4px;
+}
+
+/* Shimmer effect for side banner */
+.side-banner-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+    animation: shimmer 4s infinite;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* ============================================
    CAROUSEL
    ============================================ */
 
@@ -835,15 +1021,17 @@ body {
     margin-right: -10px;
 }
 
-/* Desktop: Banner takes 3 parts (75% width) with 3:1 aspect ratio */
+/* Desktop: Banner takes 3 parts (75% width) */
 @media (min-width: 1024px) {
     .banner-carousel {
-        flex: 0 0 74%;
+        flex: 1;
+        display: flex;
     }
     
     .carousel-container {
-        height: auto;
-        aspect-ratio: 3 / 1;
+        height: 100%;
+        width: 100%;
+        aspect-ratio: auto;
     }
 }
 
@@ -1294,8 +1482,8 @@ body {
     position: fixed;
     right: 12px;
     bottom: calc(96px + env(safe-area-inset-bottom)); /* keep above floating timer */
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: linear-gradient(135deg, #229ed9, #0088cc);
     display: flex;
@@ -1303,19 +1491,21 @@ body {
     justify-content: center;
     z-index: 1000;
     box-shadow: 0 6px 22px rgba(0, 136, 204, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    transition: box-shadow 0.25s ease;
     -webkit-tap-highlight-color: transparent;
+    animation: socialBreathe 2s ease-in-out infinite;
 }
 
 .floating-telegram:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 10px 28px rgba(0, 136, 204, 0.55);
+    box-shadow: 0 10px 28px rgba(0, 136, 204, 0.65);
+    animation: socialBreathe 1s ease-in-out infinite;
 }
 
 .floating-telegram:active {
-    transform: scale(0.96);
+    transform: scale(0.92);
+    animation: none;
 }
 
 .telegram-icon {
@@ -1324,14 +1514,69 @@ body {
     filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
 }
 
+/* Breathing animation for social buttons */
+@keyframes socialBreathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+
+.floating-whatsapp {
+    position: fixed;
+    right: 12px;
+    bottom: calc(160px + env(safe-area-inset-bottom)); /* above telegram button */
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    box-shadow: 0 6px 22px rgba(37, 211, 102, 0.45);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: box-shadow 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+    animation: socialBreathe 2s ease-in-out infinite;
+}
+
+.floating-whatsapp:hover {
+    box-shadow: 0 10px 28px rgba(37, 211, 102, 0.65);
+    animation: socialBreathe 1s ease-in-out infinite;
+}
+
+.floating-whatsapp:active {
+    transform: scale(0.92);
+    animation: none;
+}
+
+.whatsapp-icon {
+    width: 32px;
+    height: 32px;
+    color: #ffffff;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
+}
+
 /* Very short screens: tuck closer to bottom */
 @media (max-height: 640px) {
     .floating-telegram {
         bottom: calc(76px + env(safe-area-inset-bottom));
-        width: 46px;
-        height: 46px;
+        width: 50px;
+        height: 50px;
     }
     .telegram-icon { width: 100%; height: 100%; }
+    
+    .floating-whatsapp {
+        bottom: calc(134px + env(safe-area-inset-bottom));
+        width: 50px;
+        height: 50px;
+    }
+    .whatsapp-icon { width: 28px; height: 28px; }
 }
 
 /* Tablets+ can float mid-right if space allows */
@@ -1339,10 +1584,11 @@ body {
     .floating-telegram {
         bottom: auto;
         top: 50%;
-        transform: translateY(-50%);
     }
-    .floating-telegram:hover {
-        transform: translateY(-52%) scale(1.05);
+    
+    .floating-whatsapp {
+        bottom: auto;
+        top: calc(50% - 70px);
     }
 }
 
@@ -1355,70 +1601,61 @@ body {
     bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-    border: 2px solid var(--accent-cyan);
     color: var(--text-primary);
     padding: 12px 20px;
     border-radius: 15px;
     font-family: var(--font-mono);
     cursor: pointer;
     z-index: 999;
-    box-shadow: var(--glow-cyan), 0 0 30px rgba(0, 240, 255, 0.3);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
     min-width: 200px;
-    backdrop-filter: blur(15px);
-    overflow: hidden;
-    animation: floatingPulse 4s ease-in-out infinite;
+    overflow: visible;
+    
+    /* Solid dark background */
+    background: linear-gradient(135deg, #0a0e27, #0d1529);
+    border: none;
+    isolation: isolate;
 }
 
+/* Animated snake border */
 .floating-timer-button::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(
-        from 0deg,
-        transparent,
-        var(--accent-cyan),
-        transparent,
-        var(--accent-green),
-        transparent,
-        var(--accent-purple),
-        transparent
-    );
-    animation: rotateGradient 8s linear infinite;
-    opacity: 0.1;
-    z-index: -1;
+    inset: -3px;
+    border-radius: 18px;
+    background: conic-gradient(from var(--border-angle), #ffd700, #b800ff, #ffd700, #b800ff, #ffd700);
+    z-index: -2;
+    animation: connectorSnakeRotate 3s linear infinite;
 }
 
+/* Inner mask to show only the border */
 .floating-timer-button::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.4), transparent);
-    animation: scanEffect 3s ease-in-out infinite;
-    z-index: 1;
+    inset: 0;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #0a0e27, #0d1529);
+    z-index: -1;
 }
 
-@keyframes floatingPulse {
-    0%, 100% {
-        transform: translateX(-50%) scale(1);
-        box-shadow: var(--glow-cyan), 0 0 30px rgba(0, 240, 255, 0.3);
-    }
-    50% {
-        transform: translateX(-50%) scale(1.02);
-        box-shadow: var(--glow-cyan), 0 0 50px rgba(0, 240, 255, 0.5), 0 0 80px rgba(0, 255, 136, 0.2);
+/* Glow effect - separate element needed, using box-shadow instead */
+.floating-timer-button {
+    box-shadow: 
+        0 0 15px rgba(255, 215, 0, 0.3),
+        0 0 30px rgba(184, 0, 255, 0.2);
+}
+
+@keyframes connectorSnakeRotate {
+    to {
+        --border-angle: 360deg;
     }
 }
+
+/* floatingPulse removed - now using snake border effect */
 
 @keyframes rotateGradient {
     0% { transform: rotate(0deg); }
@@ -1433,18 +1670,13 @@ body {
 
 .floating-timer-button:hover {
     transform: translateX(-50%) translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 50px rgba(0, 240, 255, 0.6), var(--glow-cyan), 0 0 100px rgba(0, 255, 136, 0.4);
-    border-color: var(--accent-green);
-    animation: floatingHover 0.6s ease-in-out infinite alternate;
+    box-shadow: 
+        0 0 25px rgba(255, 215, 0, 0.5),
+        0 0 50px rgba(184, 0, 255, 0.4);
 }
 
-@keyframes floatingHover {
-    0% {
-        box-shadow: 0 15px 50px rgba(0, 240, 255, 0.6), var(--glow-cyan), 0 0 100px rgba(0, 255, 136, 0.4);
-    }
-    100% {
-        box-shadow: 0 15px 50px rgba(0, 255, 136, 0.6), var(--glow-green), 0 0 100px rgba(0, 240, 255, 0.4);
-    }
+.floating-timer-button:hover::before {
+    animation: connectorSnakeRotate 1.5s linear infinite;
 }
 
 .floating-timer-button:active {
@@ -1888,11 +2120,18 @@ body {
     }
     
     .timer-display {
-        font-size: 64px;
+        font-size: 32px;
     }
 }
 
 /* Standard mobile phones (360px-479px) */
+@media (min-width: 360px) and (max-width: 479px) {
+    .timer-display {
+        font-size: 38px;
+    }
+}
+
+/* Continue standard mobile phones */
 @media (min-width: 360px) and (max-width: 479px) {
     .main-title {
         font-size: 16px;
@@ -1949,7 +2188,7 @@ body {
     }
     
     .timer-display {
-        font-size: 86px;
+        font-size: 52px;
     }
 }
 
@@ -1988,7 +2227,7 @@ body {
     }
     
     .timer-display {
-        font-size: 82px;
+        font-size: 52px;
     }
 }
 
