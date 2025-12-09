@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0015">
+    <link rel="shortcut icon" href="asset/favicon/favicon.jpg" type="image/jpeg">
+    <link rel="icon" href="asset/favicon/favicon.jpg" type="image/jpeg">
+    
+    <!-- Code Protection Meta Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="referrer" content="no-referrer">
+    <title>POP REDE - SISTEMA RTP v2.0</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PV01P9NMZL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PV01P9NMZL');
+</script>
+
+<body>
+    <!-- AURORA BACKGROUND -->
+    <div class="terminal-bg">
+        <div class="aurora-layer aurora-1"></div>
+        <div class="aurora-layer aurora-2"></div>
+        <div class="aurora-layer aurora-3"></div>
+        <div class="grid-overlay"></div>
+        <div class="scan-line"></div>
+        <div class="floating-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+            <div class="orb orb-4"></div>
+            <div class="orb orb-5"></div>
+        </div>
+        <div class="data-stream" id="dataStream"></div>
+        <div class="particle-field" id="particleField"></div>
+    </div>
+
+    <!-- PREMIUM STATUS BAR -->
+    <div class="system-status-bar">
+        <div class="status-bar-glow"></div>
+        <div class="status-group">
+            <div class="status-item">
+                <span class="status-icon pulse-gold">◆</span>
+                <span class="status-label">SISTEMA</span>
+                <span class="status-value status-online">ONLINE</span>
+            </div>
+            <div class="status-divider">│</div>
+            <div class="status-item">
+                <span class="status-label">SYNC</span>
+                <span class="status-value" id="syncStatus">ATIVO</span>
+            </div>
+        </div>
+        <div class="status-group">
+            <div class="status-item">
+                <span class="status-icon">⏱</span>
+                <span class="status-label">PRÓX.</span>
+                <span class="status-value" id="nextUpdate">--:--</span>
+            </div>
+            <div class="status-divider">│</div>
+            <div class="status-item">
+                <span class="status-icon">🎰</span>
+                <span class="status-label">JOGOS</span>
+                <span class="status-value gold-text" id="activeGames">623</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-aurora"></div>
+        <div class="container">
+            <div class="terminal-prompt">
+                <span class="prompt-symbol">⌘</span>
+                <span class="prompt-text">pop.rede</span>
+                <span class="prompt-separator">::</span>
+                <span class="prompt-command">rtp-analytics --live</span>
+                <span class="cursor-blink">▊</span>
+            </div>
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo-container">
+                        <div class="logo-diamond">◇</div>
+                        <div class="logo-text-wrapper">
+                            <span class="logo-text">POP REDE</span>
+                            <span class="logo-subtitle">PREMIUM</span>
+                        </div>
+                    </div>
+                    <div class="version-tag">
+                        <span class="version-dot"></span>
+                        v8.9.1
+                    </div>
+                </div>
+                <div class="header-center">
+                    <div class="title-container">
+                        <div class="title-decoration left">❖</div>
+                        <h1 class="main-title">SISTEMA RTP</h1>
+                        <div class="title-decoration right">❖</div>
+                    </div>
+                    <div class="subtitle">
+                        <span class="subtitle-line"></span>
+                        <span class="subtitle-text">RASTREAMENTO EM TEMPO REAL</span>
+                        <span class="subtitle-line"></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="system-info">
+                        <div class="info-item">
+                            <span class="info-label">UPTIME</span>
+                            <span class="info-value" id="systemUptime">00:00:00</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">HORA</span>
+                            <span class="info-value" id="systemTime">00:00:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-border-glow"></div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Banner and Timer Container -->
+            <div class="banner-timer-wrapper">
+                <!-- Timer and Side Banner Section -->
+                <section class="timer-section">
+                    <div class="timer-split-wrapper">
+                        <!-- Timer Container -->
+                        <div class="timer-container">
+                            <div class="timer-ring-outer"></div>
+                            <div class="timer-ring-inner"></div>
+                            <div class="timer-label">PRÓXIMA ATUALIZAÇÃO</div>
+                            <div class="timer-display" id="countdownTimer">
+                                <span class="timer-minutes" id="timerMinutes">01</span>
+                                <span class="timer-separator">:</span>
+                                <span class="timer-seconds" id="timerSeconds">27</span>
+                            </div>
+                            <div class="timer-progress">
+                                <div class="timer-progress-track">
+                                    <div class="timer-progress-bar" id="timerProgressBar"></div>
+                                    <div class="timer-progress-glow"></div>
+                                </div>
+                                <div class="timer-progress-text">
+                                    <span>INÍCIO</span>
+                                    <span id="progressPercent" class="progress-percent">72%</span>
+                                    <span>FIM</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Side Banner Container -->
+                        <a href="https://popduqo.com?ch=23890" target="_blank" rel="noopener" class="side-banner-container side-banner-link">
+                            <div class="side-banner-glow"></div>
+                            <div class="side-banner-carousel">
+                                <div class="side-banner-track" id="sideBannerTrack">
+                                    <div class="side-banner-slide active">
+                                        <img src="asset/banner/side-1.png" alt="Side Banner 1">
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Banner Carousel -->
+                <section class="banner-carousel">
+                    <div class="carousel-container">
+                        <div class="carousel-glow"></div>
+                        <div class="carousel-track" id="carouselTrack">
+                            <div class="carousel-slide">
+                                <img src="asset/banner/1 (1).jpg" alt="Banner 1">
+                                <div class="carousel-overlay"></div>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="asset/banner/1 (2).jpg" alt="Banner 2">
+                                <div class="carousel-overlay"></div>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="asset/banner/1 (3).jpg" alt="Banner 3">
+                                <div class="carousel-overlay"></div>
+                            </div>
+                        </div>
+                        <div class="carousel-controls">
+                            <button class="carousel-btn prev" id="carouselPrev">
+                                <span>‹</span>
+                            </button>
+                            <div class="carousel-indicators" id="carouselIndicators"></div>
+                            <button class="carousel-btn next" id="carouselNext">
+                                <span>›</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Provider Section -->
+            <section class="provider-section">
+                <div class="section-header-fancy">
+                    <div class="section-icon-wrapper">
+                        <span class="section-icon">◈</span>
+                    </div>
+                    <h2 class="section-title-fancy">PROVEDORES</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="provider-grid" id="providerMenu">
+                    <button class="provider-item active" data-provider="all">
+                        <div class="provider-glow"></div>
+                        <div class="provider-icon">★</div>
+                        <span class="provider-text">TODOS</span>
+                        <span class="provider-game-count">[623]</span>
+                    </button>
+                    <button class="provider-item" data-provider="PG SOFT">
+                        <div class="provider-glow"></div>
+                        <div class="provider-icon">⬡</div>
+                        <span class="provider-text">PG SOFT</span>
+                        <span class="provider-game-count">[160]</span>
+                    </button>
+                    <button class="provider-item" data-provider="Pragmatic Play">
+                        <div class="provider-glow"></div>
+                        <div class="provider-icon">◆</div>
+                        <span class="provider-text">PRAGMATIC</span>
+                        <span class="provider-game-count">[198]</span>
+                    </button>
+                    <button class="provider-item" data-provider="Play N' GO">
+                        <div class="provider-glow"></div>
+                        <div class="provider-icon">▲</div>
+                        <span class="provider-text">PLAY N' GO</span>
+                        <span class="provider-game-count">[90]</span>
+                    </button>
+                    <button class="provider-item" data-provider="HACKSAW">
+                        <div class="provider-glow"></div>
+                        <div class="provider-icon">⬢</div>
+                        <span class="provider-text">HACKSAW</span>
+                        <span class="provider-game-count">[118]</span>
+                    </button>
+                    <button class="provider-item" data-provider="TADA">
+                        <div class="provider-glow"></div>
+                        <div class="provider-icon">✦</div>
+                        <span class="provider-text">TADAJILI</span>
+                        <span class="provider-game-count">[57]</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Games Grid -->
+            <section class="games-section">
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Games loaded here -->
+                </div>
+                
+                <!-- Load More Button -->
+                <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+                    <button class="load-more-btn" id="loadMoreBtn">
+                        <span class="btn-glow"></span>
+                        <span class="btn-icon">▼</span>
+                        <span class="btn-text">CARREGAR MAIS</span>
+                        <span class="btn-count" id="remainingGamesCount"></span>
+                    </button>
+                </div>
+            </section>
+            
+            <!-- System Console -->
+            <section class="console-section">
+                <div class="console-window">
+                    <div class="console-header">
+                        <div class="console-title">
+                            <span class="console-icon">▶</span>
+                            CONSOLE DO SISTEMA
+                            <div class="console-minimize-icon">▼</div>
+                        </div>
+                        <div class="console-controls">
+                            <span class="control-dot control-minimize"></span>
+                            <span class="control-dot control-maximize"></span>
+                            <span class="control-dot control-close"></span>
+                        </div>
+                    </div>
+                    <div class="console-body">
+                        <div class="console-line">
+                            <span class="console-prompt">[SISTEMA]</span>
+                            <span class="console-text">Inicializando módulos RTP...</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[DATABASE]</span>
+                            <span class="console-text">Conectado ao servidor</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[SYNC]</span>
+                            <span class="console-text">Sincronização habilitada</span>
+                            <span class="console-status console-ok">✓ OK</span>
+                        </div>
+                        <div class="console-line">
+                            <span class="console-prompt">[RTP]</span>
+                            <span class="console-text">Sistema ativo</span>
+                            <span class="console-status console-active">● ATIVO</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-icon">◉</span>
+                        <span class="section-text">DATABASE</span>
+                    </div>
+                    <div class="section-refresh" id="lastRefresh">
+                        <span class="refresh-icon">↻</span>
+                        <span class="refresh-text">--:--</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Floating Timer Button -->
+    <button class="floating-timer-button" id="floatingTimerBtn">
+        <div class="floating-btn-aurora"></div>
+        <div class="floating-timer-content">
+            <div class="floating-timer-text">CONECTAR</div>
+            <div class="floating-timer-display">
+                <span class="floating-timer-minutes" id="floatingTimerMinutes">01</span>
+                <span class="floating-timer-separator">:</span>
+                <span class="floating-timer-seconds" id="floatingTimerSeconds">27</span>
+            </div>
+        </div>
+        <div class="floating-timer-progress">
+            <div class="floating-timer-progress-bar" id="floatingTimerProgressBar"></div>
+        </div>
+        <span class="floating-timer-pulse"></span>
+        <span class="floating-timer-ring"></span>
+    </button>
+
+    <!-- Floating Telegram Button -->
+    <a class="floating-telegram" href="https://poppremio.com/tg" target="_blank" rel="noopener" aria-label="Abrir Telegram">
+        <img class="telegram-icon" src="tg/tg.webp" alt="Telegram">
+    </a>
+
+    <!-- Floating WhatsApp Button -->
+    <a class="floating-whatsapp" href="https://pop-agent.com/wa" target="_blank" rel="noopener" aria-label="Abrir WhatsApp">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+    </a>
+
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="popupOverlay">
+        <div class="modal-container">
+            <div class="modal-aurora"></div>
+            <button class="modal-close" id="popupClose">
+                <span>×</span>
+            </button>
+            
+            <div class="modal-header">
+                <div class="modal-logo">
+                    <span class="modal-diamond">◇</span>
+                </div>
+                <div class="modal-title">
+                    CONEXÃO
+                </div>
+                <div class="modal-subtitle">
+                    <span class="modal-icon">►</span>
+                    SELECIONE SUA PLATAFORMA
+                </div>
+            </div>
+            
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <span class="stat-label">PLATAFORMAS</span>
+                    <span class="stat-value">17</span>
+                </div>
+                <div class="modal-stat">
+                    <span class="stat-label">STATUS</span>
+                    <span class="stat-value stat-online">ONLINE</span>
+                </div>
+            </div>
+
+            <div class="modal-grid" id="popupButtons">
+                <!-- Platform cards will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="game-data.js"></script>
+    <script src="provider_image_lists.js" onerror="console.log('Modo dinâmico')"></script>
+    <script src="game_popularity.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
