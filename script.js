@@ -104,6 +104,23 @@
 // CONFIGURAÇÃO
 // ============================================
 */
+// ============================================
+// CDN BASE URL - For Multi-Site Architecture
+// ============================================
+const CDN_BASE = 'https://poprtp88.github.io/TEST-RTP-BARU-2';
+
+// ============================================
+// DEBUG: Check for external platforms config
+// ============================================
+console.log('🔍 SCRIPT.JS LOADED - Checking for PLATFORMS_CONFIG...');
+console.log('🔍 typeof PLATFORMS_CONFIG:', typeof PLATFORMS_CONFIG);
+if (typeof PLATFORMS_CONFIG !== 'undefined') {
+    console.log('✅ PLATFORMS_CONFIG FOUND! Length:', PLATFORMS_CONFIG.length);
+    console.log('✅ First platform URL:', PLATFORMS_CONFIG[0]?.url);
+} else {
+    console.log('⚠️ PLATFORMS_CONFIG NOT FOUND - will use defaults');
+}
+
 const CONFIG = {
     gamesPerProvider: 0, // 0 = mostrar todos
     rtpRanges: {
@@ -121,10 +138,11 @@ const CONFIG = {
         { value: '17X', type: 'high' },
         { value: '20X', type: 'high' }
     ],
-    platforms: [
+    // Default platforms (fallback if no external config)
+    defaultPlatforms: [
         { id: 1, url: 'https://popduqo.com?ch=23890' },
         { id: 2, url: 'https://popx5t.com?ch=13250' },
-        { id: 3, url: 'https://popuptefa.com?ch=33323' }, // POPN1
+        { id: 3, url: 'https://popuptefa.com?ch=33323' },
         { id: 4, url: 'https://popbra.com/#/register?r_code=255862939718' },
         { id: 5, url: 'https://pop555.com/#/register?r_code=27363421531' },
         { id: 6, url: 'https://www.popbem66.com/#/register?r_code=62548100237' },
@@ -135,12 +153,25 @@ const CONFIG = {
         { id: 11, url: 'https://26bet.com/?id=911719620' },
         { id: 12, url: 'https://poppg.com/#/register?r_code=87311374506' },
         { id: 13, url: 'https://q5gdw6.com?ch=2291' },
-        { id: 14, url: 'https://popdezem.com?ch=30988' }, // POPDEZ
+        { id: 14, url: 'https://popdezem.com?ch=30988' },
         { id: 15, url: 'https://9zqllv.com?ch=17356' },
         { id: 16, url: 'https://popceu.com/#/register?r_code=46223100109' },
-        { id: 17, url: 'https://poplud.com?ch=30282' }, 
+        { id: 17, url: 'https://poplud.com?ch=30282' }
     ]
 };
+
+// ============================================
+// PLATFORMS ASSIGNMENT - Use external config or defaults
+// ============================================
+// Directly assign platforms based on whether external config exists
+if (typeof PLATFORMS_CONFIG !== 'undefined' && Array.isArray(PLATFORMS_CONFIG) && PLATFORMS_CONFIG.length > 0) {
+    CONFIG.platforms = PLATFORMS_CONFIG;
+    console.log('✅✅✅ USING EXTERNAL PLATFORMS:', PLATFORMS_CONFIG.length, 'platforms');
+    console.log('✅ First platform:', PLATFORMS_CONFIG[0]);
+} else {
+    CONFIG.platforms = CONFIG.defaultPlatforms;
+    console.log('⚠️⚠️⚠️ USING DEFAULT PLATFORMS (no external config)');
+}
 
 // Estado da aplicação
 let showAllGames = true;
@@ -157,18 +188,32 @@ let visibleLimit = GAMES_PER_PAGE;
 // FUNÇÕES UTILITÁRIAS
 // ============================================
 
+/**
+ * Generates a time-based seed synchronized to São Paulo timezone (UTC-3).
+ * This ensures all users worldwide see the same RTP values regardless of their local timezone.
+ * Updates every 3 minutes, aligned with the Telegram bot.
+ * 
+ * @returns {number} Total minutes since epoch in São Paulo timezone, rounded to 3-minute intervals
+ */
 function getTimeSeed() {
-    const now = new Date();
-    const currentMinute = now.getMinutes();
+    // CRITICAL: Use São Paulo timezone to ensure consistency across all users and match Telegram bot
+    // São Paulo is always UTC-3 (Brazil stopped DST in 2019)
+    const saoPauloTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+    
+    const currentMinute = saoPauloTime.getMinutes();
     const roundedMinute = Math.floor(currentMinute / 3) * 3;
-    const totalMinutes = now.getFullYear() * 525600 +
-                        now.getMonth() * 43800 +
-                        now.getDate() * 1440 +
-                        now.getHours() * 60 +
+    
+    // Calculate total minutes using São Paulo time
+    const totalMinutes = saoPauloTime.getFullYear() * 525600 +
+                        saoPauloTime.getMonth() * 43800 +
+                        saoPauloTime.getDate() * 1440 +
+                        saoPauloTime.getHours() * 60 +
                         roundedMinute;
     
     // Debug logging to track seed changes
-    console.log(`🕐 TimeSeed Debug: Minuto=${currentMinute}, Arredondado=${roundedMinute}, Seed=${totalMinutes}`);
+    console.log(`🕐 TimeSeed Debug (São Paulo): Minuto=${currentMinute}, Arredondado=${roundedMinute}, Seed=${totalMinutes}`);
+    console.log(`📍 Hora Local: ${new Date().toLocaleTimeString('pt-BR')}`);
+    console.log(`📍 Hora São Paulo: ${saoPauloTime.toLocaleTimeString('pt-BR')}`);
     
     return totalMinutes;
 }
@@ -243,9 +288,14 @@ function getRTPColorClass(rtp) {
 // SISTEMA DE MONITORAMENTO
 // ============================================
 
+/**
+ * Updates the system time display showing São Paulo timezone.
+ * This is the authoritative time source for the entire system.
+ */
 function updateSystemTime() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('pt-BR', { 
+    // Display São Paulo time (synchronized with RTP calculations)
+    const saoPauloTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+    const timeStr = saoPauloTime.toLocaleTimeString('pt-BR', { 
         hour: '2-digit', 
         minute: '2-digit', 
         second: '2-digit' 
@@ -300,9 +350,12 @@ function updateCycleCount() {
     cycleCount++;
 }
 
+/**
+ * Updates the last refresh time display using São Paulo timezone.
+ */
 function updateLastRefresh() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('pt-BR', { 
+    const saoPauloTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+    const timeStr = saoPauloTime.toLocaleTimeString('pt-BR', { 
         hour: '2-digit', 
         minute: '2-digit'
     });
@@ -320,11 +373,17 @@ function updateLastRefresh() {
 // TEMPORIZADOR DE CONTAGEM REGRESSIVA
 // ============================================
 
+/**
+ * Calculates milliseconds until next RTP update (every 3 minutes).
+ * Uses São Paulo timezone to stay synchronized with all users.
+ * 
+ * @returns {number} Milliseconds until next update
+ */
 function getTimeUntilNextUpdate() {
-    const now = new Date();
-    const currentMinutes = now.getMinutes();
-    const currentSeconds = now.getSeconds();
-    const currentMilliseconds = now.getMilliseconds();
+    const saoPauloTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+    const currentMinutes = saoPauloTime.getMinutes();
+    const currentSeconds = saoPauloTime.getSeconds();
+    const currentMilliseconds = saoPauloTime.getMilliseconds();
     
     const minutesUntilNext = 3 - (currentMinutes % 3);
     const msUntilNext = (minutesUntilNext * 60 * 1000) - (currentSeconds * 1000) - currentMilliseconds;
@@ -386,6 +445,10 @@ function updateCountdownTimer() {
     }
 }
 
+/**
+ * Starts the countdown timer and manages automatic RTP updates every 3 minutes.
+ * Uses São Paulo timezone for consistency across all users globally.
+ */
 function startCountdownTimer() {
     updateCountdownTimer();
     
@@ -394,8 +457,9 @@ function startCountdownTimer() {
     setInterval(() => {
         updateCountdownTimer();
         
-        const now = new Date();
-        const currentMinute = now.getMinutes();
+        // Use São Paulo time for update triggering
+        const saoPauloTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+        const currentMinute = saoPauloTime.getMinutes();
         const currentThreeMinuteBlock = Math.floor(currentMinute / 3) * 3;
         
         // Only trigger update when we enter a new 3-minute block
@@ -406,9 +470,10 @@ function startCountdownTimer() {
             setTimeout(() => {
                 const currentTimeSeed = getTimeSeed();
                 console.log('═══════════════════════════════════════');
-                console.log('🔄 ATUALIZAÇÃO DE RTP INICIADA');
+                console.log('🔄 ATUALIZAÇÃO DE RTP INICIADA (São Paulo Time)');
                 console.log(`⏰ TimeSeed NOVO: ${currentTimeSeed}`);
-                console.log(`📅 Minuto atual: ${now.getMinutes()}, Bloco: ${currentThreeMinuteBlock}`);
+                console.log(`📅 Minuto São Paulo: ${currentMinute}, Bloco: ${currentThreeMinuteBlock}`);
+                console.log(`🌎 Hora São Paulo: ${saoPauloTime.toLocaleTimeString('pt-BR')}`);
                 console.log('🎮 Recalculando RTP de TODOS os jogos...');
                 console.log('═══════════════════════════════════════');
                 
@@ -418,6 +483,7 @@ function startCountdownTimer() {
                 updateLastRefresh();
                 
                 console.log('✅ RTP atualizado! Valores devem estar DIFERENTES agora.');
+                console.log('✅ Todos os usuários no mundo veem os mesmos valores!');
             }, 100); // 100ms delay to ensure we're in the new minute
         }
     }, 100);
@@ -448,7 +514,7 @@ async function loadAllGames() {
                             id: gameId,
                             provider: provider,
                             imageName: imageName,
-                            imagePath: `images/${provider}/${imageName}`,
+                            imagePath: `${CDN_BASE}/images/${provider}/${imageName}`,
                             priority: priority
                         });
                     });
@@ -480,7 +546,7 @@ async function loadAllGames() {
                     id: gameId,
                     provider: provider,
                     imageName: imageName,
-                    imagePath: `images/${provider}/${imageName}`,
+                    imagePath: `${CDN_BASE}/images/${provider}/${imageName}`,
                     priority: priority
                 });
             });
@@ -800,7 +866,7 @@ function generatePlatformCards() {
         card.innerHTML = `
             ${hotBadge}
             <div class="platform-overlay"></div>
-            <img src="asset/${platform.id}.png" alt="Plataforma ${platform.id}" />
+            <img src="${CDN_BASE}/asset/${platform.id}.png" alt="Plataforma ${platform.id}" />
             <div class="platform-status">
                 <span class="status-dot"></span>
                 ONLINE

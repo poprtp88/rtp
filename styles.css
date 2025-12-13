@@ -1019,6 +1019,7 @@ body {
     box-shadow: var(--glow-cyan);
     padding-right: -10px;
     margin-right: -10px;
+    object-fit: stretch;
 }
 
 /* Desktop: Banner takes 3 parts (75% width) */

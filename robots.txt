@@ -1,0 +1,28 @@
+# Robots.txt for POP RTP - Sistema RTP
+# https://poprtp.com/robots.txt
+
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Specific rules for Google bot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Allow image indexing
+User-agent: Googlebot-Image
+Allow: /
+
+# Disallow certain paths (if any)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Sitemap location
+Sitemap: https://poprtp.com/sitemap.xml
+
+# Additional notes:
+# - All content is allowed for indexing
+# - Images in /images/ and /asset/ are crawlable
+# - Game data is accessible
+
