@@ -857,16 +857,22 @@ function generatePlatformCards() {
         
         // Add special class for the first platform (Gold/Hot)
         const isGold = index === 0;
+        const isNewPlatform = platform.id === 18 || platform.name === 'NEW PLATFORM';
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
         
         card.setAttribute('data-url', platform.url);
         
         const hotBadge = isGold ? '<div class="platform-hot">HOT</div>' : '';
+        const emBreveBadge = isNewPlatform ? '<div class="em-breve-badge">EM BREVE</div>' : '';
+        
+        // Use local asset path for PopLuz (id 18), CDN for others
+        const imagePath = platform.id === 18 ? 'asset/18.png' : `${CDN_BASE}/asset/${platform.id}.png`;
         
         card.innerHTML = `
             ${hotBadge}
+            ${emBreveBadge}
             <div class="platform-overlay"></div>
-            <img src="${CDN_BASE}/asset/${platform.id}.png" alt="Plataforma ${platform.id}" />
+            <img src="${imagePath}" alt="Plataforma ${platform.id}" />
             <div class="platform-status">
                 <span class="status-dot"></span>
                 ONLINE
@@ -877,6 +883,12 @@ function generatePlatformCards() {
             e.preventDefault();
 
             const url = this.getAttribute('data-url');
+            
+            // Don't redirect if it's the new platform (EM BREVE)
+            if (isNewPlatform || url === '#') {
+                console.log(`🚫 Plataforma em breve - redirecionamento desabilitado`);
+                return;
+            }
             
             console.log(`🔗 Abrindo plataforma: ${url}`);
             
