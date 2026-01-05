@@ -863,14 +863,14 @@ function generatePlatformCards() {
         card.setAttribute('data-url', platform.url);
         
         const hotBadge = isGold ? '<div class="platform-hot">HOT</div>' : '';
-        const emBreveBadge = isNewPlatform ? '<div class="em-breve-badge">EM BREVE</div>' : '';
+        const newPlatformHotBadge = isNewPlatform && !isGold ? '<div class="platform-hot">HOT</div>' : '';
         
         // Use local asset path for PopLuz (id 18), CDN for others
         const imagePath = platform.id === 18 ? 'asset/18.png' : `${CDN_BASE}/asset/${platform.id}.png`;
         
         card.innerHTML = `
             ${hotBadge}
-            ${emBreveBadge}
+            ${newPlatformHotBadge}
             <div class="platform-overlay"></div>
             <img src="${imagePath}" alt="Plataforma ${platform.id}" />
             <div class="platform-status">
