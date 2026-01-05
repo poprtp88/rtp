@@ -639,17 +639,20 @@ body {
     position: relative;
 }
 
-/* Side Banner - Non-clickable (removed hover effects for link) */
-.side-banner-container {
-    cursor: default;
+/* Side Banner Link - Clickable hover effects */
+.side-banner-link:hover {
+    transform: scale(1.02);
+    animation: snakeRotate 1.5s linear infinite;
 }
 
-.side-banner-container:hover {
-    transform: none;
+.side-banner-link:hover::before {
+    opacity: 0.9;
+    filter: blur(15px);
+    animation: snakeRotate 1.5s linear infinite;
 }
 
-.side-banner-container:hover::before {
-    animation: snakeRotate 3s linear infinite;
+.side-banner-link:active {
+    transform: scale(0.98);
 }
 
 /* Mobile: Timer container takes half width and centers content */
