@@ -15,7 +15,7 @@
 
 // Platform configuration - CUSTOMIZE THESE LINKS FOR YOUR SITE
 const PLATFORMS_CONFIG = [
-    { id: 18, url: '#', name: 'NEW PLATFORM' },
+    { id: 18, url: 'https://popluz6n.com?ch=40617', name: 'NEW PLATFORM' },
     { id: 1, url: 'https://popduqo.com?ch=23890' },
     { id: 2, url: 'https://popx5t.com?ch=13250' },
     { id: 3, url: 'https://popuptefa.com?ch=33323' },

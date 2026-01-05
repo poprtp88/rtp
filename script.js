@@ -884,8 +884,8 @@ function generatePlatformCards() {
 
             const url = this.getAttribute('data-url');
             
-            // Don't redirect if it's the new platform (EM BREVE)
-            if (isNewPlatform || url === '#') {
+            // Don't redirect if URL is empty or '#'
+            if (!url || url === '#') {
                 console.log(`🚫 Plataforma em breve - redirecionamento desabilitado`);
                 return;
             }
