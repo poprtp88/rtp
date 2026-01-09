@@ -842,6 +842,98 @@ function setupProviderMenu() {
 }
 
 // ============================================
+// POPUP BANNER WITH SHOCKWAVE EFFECT
+// ============================================
+
+/**
+ * Initializes the popup banner system with shockwave effects.
+ * Shows the banner after a delay and handles close functionality.
+ */
+function setupPopupBanner() {
+    const popupOverlay = document.getElementById('popupBannerOverlay');
+    const popupClose = document.getElementById('popupBannerClose');
+    const popupContainer = document.getElementById('popupBannerContainer');
+    
+    if (!popupOverlay || !popupClose || !popupContainer) {
+        console.warn('⚠️ Popup banner elements not found');
+        return;
+    }
+    
+    /**
+     * Opens the popup banner with animation
+     */
+    function openPopupBanner() {
+        popupOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Shockwave effects are handled automatically by CSS animations
+        // They run continuously with periodic timing (slow, thin waves)
+        
+        console.log('📢 Popup banner opened');
+    }
+    
+    /**
+     * Closes the popup banner
+     */
+    function closePopupBanner() {
+        popupOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        console.log('📢 Popup banner closed');
+    }
+    
+    /**
+     * Triggers a shockwave effect from the container center
+     * Note: CSS animations handle the periodic timing automatically
+     */
+    function triggerShockwave() {
+        // Shockwaves are now handled entirely by CSS animations
+        // with periodic timing (4s duration, staggered delays)
+        // No need to manually trigger - they run continuously
+    }
+    
+    // Close button click handler
+    popupClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closePopupBanner();
+    });
+    
+    // Click outside to close (but not on the banner link)
+    popupOverlay.addEventListener('click', (e) => {
+        if (e.target === popupOverlay) {
+            closePopupBanner();
+        }
+    });
+    
+    // Prevent closing when clicking on the banner link itself
+    const popupLink = popupContainer.querySelector('.popup-banner-link');
+    if (popupLink) {
+        popupLink.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Link will handle navigation naturally
+        });
+    }
+    
+    // ESC key to close
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popupOverlay.classList.contains('active')) {
+            closePopupBanner();
+        }
+    });
+    
+    // Show popup banner after 2 seconds delay
+    setTimeout(() => {
+        openPopupBanner();
+    }, 2000);
+    
+    // Store functions globally for external control
+    window.openPopupBanner = openPopupBanner;
+    window.closePopupBanner = closePopupBanner;
+    
+    console.log('✅ Popup banner system initialized');
+}
+
+// ============================================
 // MODAL DE PLATAFORMAS
 // ============================================
 
@@ -992,6 +1084,7 @@ async function init() {
     setupSideBannerCarousel();
     setupProviderMenu();
     setupPlatformModal();
+    setupPopupBanner();
     setupLoadMore();
     
     // Iniciar monitores do sistema

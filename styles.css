@@ -1788,6 +1788,510 @@ body {
 }
 
 /* ============================================
+   POPUP BANNER WITH SHOCKWAVE EFFECT
+   ============================================ */
+
+.popup-banner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    overflow: visible;
+}
+
+.popup-banner-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.popup-banner-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    border-radius: 20px;
+    overflow: visible;
+    animation: popupBannerAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transform-origin: center center;
+    /* Ensure shockwaves can expand beyond container */
+    padding: 0;
+    margin: 0;
+}
+
+@keyframes popupBannerAppear {
+    0% {
+        transform: scale(0.5) rotate(-5deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05) rotate(2deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.popup-banner-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 
+        0 0 40px rgba(255, 215, 0, 0.6),
+        0 0 80px rgba(184, 0, 255, 0.4),
+        0 0 120px rgba(0, 240, 255, 0.3),
+        inset 0 0 30px rgba(255, 215, 0, 0.2);
+    background: linear-gradient(var(--bg-secondary), var(--bg-tertiary));
+    animation: borderGlow 3s ease-in-out infinite;
+}
+
+.popup-banner-image-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 22px;
+    background: conic-gradient(from 0deg, #ffd700, #b800ff, #00f0ff, #00ff88, #ffd700);
+    z-index: -1;
+    animation: borderRotate 4s linear infinite;
+    opacity: 0.9;
+}
+
+.popup-banner-image-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 19px;
+    background: linear-gradient(var(--bg-secondary), var(--bg-tertiary));
+    z-index: -1;
+}
+
+@keyframes borderRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes borderGlow {
+    0%, 100% {
+        box-shadow: 
+            0 0 40px rgba(255, 215, 0, 0.6),
+            0 0 80px rgba(184, 0, 255, 0.4),
+            0 0 120px rgba(0, 240, 255, 0.3),
+            inset 0 0 30px rgba(255, 215, 0, 0.2);
+    }
+    50% {
+        box-shadow: 
+            0 0 60px rgba(255, 215, 0, 0.8),
+            0 0 100px rgba(184, 0, 255, 0.6),
+            0 0 140px rgba(0, 240, 255, 0.5),
+            inset 0 0 40px rgba(255, 215, 0, 0.3);
+    }
+}
+
+.popup-banner-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.popup-banner-link:hover {
+    transform: scale(1.02);
+}
+
+.popup-banner-link:active {
+    transform: scale(0.98);
+}
+
+.popup-banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 17px;
+    animation: imagePulse 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Stylish Register Button */
+.popup-register-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 15px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ffd700 100%);
+    background-size: 200% 200%;
+    border: none;
+    border-radius: 12px;
+    color: #000;
+    font-family: var(--font-primary);
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 4px 15px rgba(255, 215, 0, 0.5),
+        0 8px 30px rgba(255, 140, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    animation: buttonShine 3s ease-in-out infinite;
+    z-index: 5;
+}
+
+@keyframes buttonShine {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.popup-register-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    transition: left 0.6s ease;
+}
+
+.popup-register-btn:hover::before {
+    left: 100%;
+}
+
+.popup-register-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 6px 25px rgba(255, 215, 0, 0.7),
+        0 12px 40px rgba(255, 140, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.popup-register-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.register-btn-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    animation: btnGlowPulse 2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes btnGlowPulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.register-btn-text {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.register-btn-icon {
+    position: relative;
+    z-index: 2;
+    font-size: 16px;
+    animation: iconBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+}
+
+.popup-register-btn:hover .register-btn-icon {
+    animation: none;
+    transform: translateX(8px);
+}
+
+@keyframes imagePulse {
+    0%, 100% {
+        filter: brightness(1) saturate(1);
+    }
+    50% {
+        filter: brightness(1.1) saturate(1.2);
+    }
+}
+
+.popup-banner-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    animation: glowPulse 2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+/* Shockwave rings - Slow, thin waves emanating from container edges outward periodically */
+.shockwave-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid;
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: -2;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.shockwave-ring-1 {
+    border-color: rgba(255, 215, 0, 0.8);
+    animation: shockwaveEmanate 6s ease-out 0s infinite;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+.shockwave-ring-2 {
+    border-color: rgba(184, 0, 255, 0.7);
+    animation: shockwaveEmanate 6s ease-out 2s infinite;
+    box-shadow: 0 0 20px rgba(184, 0, 255, 0.5);
+}
+
+.shockwave-ring-3 {
+    border-color: rgba(0, 240, 255, 0.6);
+    animation: shockwaveEmanate 6s ease-out 4s infinite;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+@keyframes shockwaveEmanate {
+    0% {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.9;
+        border-width: 1px;
+    }
+    15% {
+        opacity: 0.8;
+        border-width: 1px;
+    }
+    40% {
+        opacity: 0.5;
+        border-width: 1px;
+    }
+    70% {
+        opacity: 0.2;
+        border-width: 1px;
+    }
+    100% {
+        top: -300px;
+        left: -300px;
+        right: -300px;
+        bottom: -300px;
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+/* Close button */
+.popup-banner-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, rgba(255, 0, 85, 0.9), rgba(184, 0, 255, 0.9));
+    border: 3px solid var(--accent-red);
+    border-radius: 50%;
+    color: white;
+    font-size: 28px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 0 20px rgba(255, 0, 85, 0.6),
+        0 0 40px rgba(184, 0, 255, 0.4);
+    animation: closeButtonPulse 2s ease-in-out infinite;
+}
+
+@keyframes closeButtonPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 
+            0 0 20px rgba(255, 0, 85, 0.6),
+            0 0 40px rgba(184, 0, 255, 0.4);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 
+            0 0 30px rgba(255, 0, 85, 0.8),
+            0 0 60px rgba(184, 0, 255, 0.6);
+    }
+}
+
+.popup-banner-close:hover {
+    transform: scale(1.15) rotate(90deg);
+    background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+    box-shadow: 
+        0 0 30px rgba(255, 0, 85, 0.9),
+        0 0 60px rgba(184, 0, 255, 0.7);
+}
+
+.popup-banner-close:active {
+    transform: scale(0.95) rotate(90deg);
+}
+
+.popup-banner-close span {
+    line-height: 1;
+    display: block;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .popup-banner-container {
+        max-width: 95%;
+        max-height: 85vh;
+    }
+    
+    .popup-banner-close {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+        top: -12px;
+        right: -12px;
+    }
+    
+    .popup-register-btn {
+        padding: 14px 24px;
+        font-size: 15px;
+        letter-spacing: 1.5px;
+        margin-top: 12px;
+    }
+    
+    .register-btn-icon {
+        font-size: 14px;
+    }
+    
+    @keyframes slowShockwaveExpand {
+        0% {
+            width: 0;
+            height: 0;
+            opacity: 0.8;
+            border-width: 1px;
+        }
+        20% {
+            opacity: 0.6;
+            border-width: 1px;
+        }
+        50% {
+            opacity: 0.3;
+            border-width: 1px;
+        }
+        100% {
+            width: 600px;
+            height: 600px;
+            opacity: 0;
+            border-width: 1px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .popup-banner-container {
+        max-width: 98%;
+        max-height: 80vh;
+    }
+    
+    .popup-banner-close {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+        top: -10px;
+        right: -10px;
+    }
+    
+    .popup-register-btn {
+        padding: 12px 20px;
+        font-size: 13px;
+        letter-spacing: 1px;
+        margin-top: 10px;
+        gap: 8px;
+    }
+    
+    .register-btn-icon {
+        font-size: 12px;
+    }
+    
+    @keyframes shockwaveEmanate {
+        100% {
+            top: -100px;
+            left: -100px;
+            right: -100px;
+            bottom: -100px;
+        }
+    }
+}
+
+/* ============================================
    MODAL - MOBILE OPTIMIZED
    ============================================ */
 
