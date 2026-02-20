@@ -288,7 +288,7 @@ function generatePlatformCards() {
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
         card.setAttribute('data-url', platform.url);
         
-        const hotBadge = isGold ? '<div class="platform-hot">HOT</div>' : '';
+        const hotBadge = isGold ? '<div class="platform-hot">EM BREVE</div>' : '';
         
         // ✅ CRITICAL: Use CDN path for platform logos
         const logoPath = `${CDN_PATHS.asset}/${platform.id}.png`;

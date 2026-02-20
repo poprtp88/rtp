@@ -10,11 +10,13 @@
  * 3. Load this file BEFORE script.js in your HTML
  * 
  * NOTE: The platform images (1.png through 17.png) are loaded from CDN.
+ *       Platforms 18+ use local assets (asset/{id}.png).
  *       Only the URLs are customizable per site.
  */
 
 // Platform configuration - CUSTOMIZE THESE LINKS FOR YOUR SITE
 const PLATFORMS_CONFIG = [
+    { id: 19, url: '#', name: 'EM BREVE' },
     { id: 18, url: 'https://popluz6n.com?ch=40617', name: 'NEW PLATFORM' },
     { id: 1, url: 'https://popduqo.com?ch=23890' },
     { id: 2, url: 'https://popx5t.com?ch=13250' },

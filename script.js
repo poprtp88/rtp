@@ -949,26 +949,30 @@ function generatePlatformCards() {
         
         // Add special class for the first platform (Gold/Hot)
         const isGold = index === 0;
-        const isNewPlatform = platform.id === 18 || platform.name === 'NEW PLATFORM';
+        const isNewPlatform = platform.id >= 18 || platform.name === 'NEW PLATFORM' || platform.name === 'EM BREVE';
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
         
         card.setAttribute('data-url', platform.url);
         
+        const isEmBreve = platform.name === 'EM BREVE' || (!platform.url || platform.url === '#');
         const hotBadge = isGold ? '<div class="platform-hot">HOT</div>' : '';
-        const newPlatformHotBadge = isNewPlatform && !isGold ? '<div class="platform-hot">HOT</div>' : '';
+        const newPlatformHotBadge = isNewPlatform && !isGold
+            ? `<div class="platform-hot">${isEmBreve ? 'EM BREVE' : 'HOT'}</div>`
+            : '';
         
-        // Use local asset path for PopLuz (id 18), CDN for others
-        const imagePath = platform.id === 18 ? 'asset/18.png' : `${CDN_BASE}/asset/${platform.id}.png`;
+        // Use local asset path for platforms 18+ (not on CDN), CDN for 1-17
+        const imagePath = platform.id >= 18 ? `asset/${platform.id}.png` : `${CDN_BASE}/asset/${platform.id}.png`;
+        
+        const statusOverlay = isEmBreve
+            ? ''
+            : '<div class="platform-status"><span class="status-dot"></span>ONLINE</div>';
         
         card.innerHTML = `
             ${hotBadge}
             ${newPlatformHotBadge}
             <div class="platform-overlay"></div>
             <img src="${imagePath}" alt="Plataforma ${platform.id}" />
-            <div class="platform-status">
-                <span class="status-dot"></span>
-                ONLINE
-            </div>
+            ${statusOverlay}
         `;
         
         card.addEventListener('click', function(e) {
