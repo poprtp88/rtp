@@ -181,8 +181,9 @@ let systemStartTime = Date.now();
 let cycleCount = 1;
 
 // Pagination Settings
-const GAMES_PER_PAGE = 100;
-let visibleLimit = GAMES_PER_PAGE;
+const INITIAL_GAMES = 25;
+const GAMES_PER_PAGE = 25;
+let visibleLimit = INITIAL_GAMES;
 
 // ============================================
 // FUNÇÕES UTILITÁRIAS
@@ -814,7 +815,7 @@ function setupProviderMenu() {
             currentProvider = provider;
             
             // Reset pagination when changing filters
-            visibleLimit = GAMES_PER_PAGE;
+            visibleLimit = INITIAL_GAMES;
             
             providerItems.forEach(i => i.classList.remove('active'));
             this.classList.add('active');
