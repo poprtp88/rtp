@@ -16,7 +16,7 @@
 
 // Platform configuration - CUSTOMIZE THESE LINKS FOR YOUR SITE
 const PLATFORMS_CONFIG = [
-    { id: 19, url: '#', name: 'EM BREVE' },
+    { id: 19, url: 'https://00popzoe.com', name: 'EM BREVE' },
     { id: 18, url: 'https://popluz6n.com?ch=40617', name: 'NEW PLATFORM' },
     { id: 1, url: 'https://popduqo.com?ch=23890' },
     { id: 2, url: 'https://popx5t.com?ch=13250' },

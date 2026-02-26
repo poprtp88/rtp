@@ -950,16 +950,15 @@ function generatePlatformCards() {
         
         // Add special class for the first platform (Gold/Hot)
         const isGold = index === 0;
-        const isNewPlatform = platform.id >= 18 || platform.name === 'NEW PLATFORM' || platform.name === 'EM BREVE';
+        const isPlatform19 = platform.id === 19;
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
         
         card.setAttribute('data-url', platform.url);
         
         const isEmBreve = platform.name === 'EM BREVE' || (!platform.url || platform.url === '#');
-        const hotBadge = isGold ? '<div class="platform-hot">HOT</div>' : '';
-        const newPlatformHotBadge = isNewPlatform && !isGold
-            ? `<div class="platform-hot">${isEmBreve ? 'EM BREVE' : 'HOT'}</div>`
-            : '';
+        // Only platform 19 gets EM BREVE; first platform gets HOT only if not platform 19
+        const hotBadge = isGold && !isPlatform19 ? '<div class="platform-hot">HOT</div>' : '';
+        const newPlatformHotBadge = isPlatform19 ? '<div class="platform-hot">EM BREVE</div>' : '';
         
         // Use local asset path for platforms 18+ (not on CDN), CDN for 1-17
         const imagePath = platform.id >= 18 ? `asset/${platform.id}.png` : `${CDN_BASE}/asset/${platform.id}.png`;
