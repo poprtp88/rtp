@@ -906,15 +906,94 @@ function setupPopupBanner() {
         }
     });
     
-    // Prevent closing when clicking on the banner link itself
-    const popupLink = popupContainer.querySelector('.popup-banner-link');
-    if (popupLink) {
-        popupLink.addEventListener('click', (e) => {
-            e.stopPropagation();
-            // Link will handle navigation naturally
-        });
+    // Prevent closing when clicking on banner links
+    popupContainer.querySelectorAll('.popup-banner-link').forEach(link => {
+        link.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    // ── Popup Carousel ───────────────────────────────────────────────
+    const popupTrack      = document.getElementById('popupCarouselTrack');
+    const popupPrevBtn    = document.getElementById('popupCarouselPrev');
+    const popupNextBtn    = document.getElementById('popupCarouselNext');
+    const popupDots       = document.querySelectorAll('.popup-dot');
+    const popupSlides     = document.querySelectorAll('.popup-carousel-slide');
+    const popupRegisterBtn = document.getElementById('popupRegisterBtn');
+
+    /** href and register-button text for each slide */
+    const popupSlideData = [
+        { href: 'https://popsur.com',       btnText: 'PARTICIPE AGORA - POPSUR' },
+        { href: 'https://00popzoe.com',     btnText: 'REGISTRAR AGORA - POPZOE' }
+    ];
+
+    let popupCurrent  = 0;
+    let popupInterval = null;
+
+    /**
+     * Moves the popup carousel to the given index, updates dots and register btn.
+     * @param {number} index - Target slide index
+     */
+    function goToPopupSlide(index) {
+        popupCurrent = ((index % popupSlides.length) + popupSlides.length) % popupSlides.length;
+        popupTrack.style.transform = `translateX(-${popupCurrent * 100}%)`;
+        popupDots.forEach((dot, i) => dot.classList.toggle('active', i === popupCurrent));
+        if (popupRegisterBtn) {
+            popupRegisterBtn.href    = popupSlideData[popupCurrent].href;
+            const textEl = popupRegisterBtn.querySelector('.register-btn-text');
+            if (textEl) textEl.textContent = popupSlideData[popupCurrent].btnText;
+        }
     }
-    
+
+    /** Resets auto-advance timer */
+    function resetPopupInterval() {
+        clearInterval(popupInterval);
+        popupInterval = setInterval(() => goToPopupSlide(popupCurrent + 1), 5000);
+    }
+
+    if (popupTrack && popupSlides.length > 1) {
+        // Arrow buttons
+        if (popupPrevBtn) {
+            popupPrevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goToPopupSlide(popupCurrent - 1);
+                resetPopupInterval();
+            });
+        }
+        if (popupNextBtn) {
+            popupNextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goToPopupSlide(popupCurrent + 1);
+                resetPopupInterval();
+            });
+        }
+
+        // Dot navigation
+        popupDots.forEach((dot, i) => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goToPopupSlide(i);
+                resetPopupInterval();
+            });
+        });
+
+        // Touch / swipe support
+        let touchStartX = 0;
+        popupTrack.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        popupTrack.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 40) {
+                goToPopupSlide(popupCurrent + (diff > 0 ? 1 : -1));
+                resetPopupInterval();
+            }
+        });
+
+        // Initialise first slide + start auto-advance
+        goToPopupSlide(0);
+        resetPopupInterval();
+    }
+    // ── End Popup Carousel ───────────────────────────────────────────
+
     // ESC key to close
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && popupOverlay.classList.contains('active')) {
@@ -948,17 +1027,18 @@ function generatePlatformCards() {
         const card = document.createElement('a');
         card.href = '#';
         
-        // Add special class for the first platform (Gold/Hot)
+        // Add special class for the first platform (Gold)
         const isGold = index === 0;
         const isPlatform19 = platform.id === 19;
+        const isPlatform20 = platform.id === 20;
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
         
         card.setAttribute('data-url', platform.url);
         
         const isEmBreve = platform.name === 'EM BREVE' || (!platform.url || platform.url === '#');
-        // Only platform 19 gets EM BREVE; first platform gets HOT only if not platform 19
-        const hotBadge = isGold && !isPlatform19 ? '<div class="platform-hot">HOT</div>' : '';
-        const newPlatformHotBadge = isPlatform19 ? '<div class="platform-hot">EM BREVE</div>' : '';
+        // Platform 20 (PopSur) gets EM BREVE; Platform 19 (PopZoe) gets HOT
+        const hotBadge = isPlatform19 ? '<div class="platform-hot">HOT</div>' : '';
+        const newPlatformHotBadge = isPlatform20 ? '<div class="platform-hot">EM BREVE</div>' : '';
         
         // Use local asset path for platforms 18+ (not on CDN), CDN for 1-17
         const imagePath = platform.id >= 18 ? `asset/${platform.id}.png` : `${CDN_BASE}/asset/${platform.id}.png`;
