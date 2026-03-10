@@ -921,7 +921,7 @@ function setupPopupBanner() {
 
     /** href and register-button text for each slide */
     const popupSlideData = [
-        { href: 'https://popsur.com',       btnText: 'PARTICIPE AGORA - POPSUR' },
+        { href: 'https://c7m1qz8x.com?ch=85303', btnText: 'PARTICIPE AGORA - POPSUR' },
         { href: 'https://00popzoe.com',     btnText: 'REGISTRAR AGORA - POPZOE' }
     ];
 
