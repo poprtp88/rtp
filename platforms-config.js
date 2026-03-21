@@ -10,13 +10,15 @@
  * 3. Load this file BEFORE script.js in your HTML
  * 
  * NOTE: The platform images (1.png through 17.png) are loaded from CDN.
- *       Platforms 18+ use local assets (asset/{id}.png).
+ *       Platforms 18+ use local assets (asset/{id}.png), e.g. 18.png, 19.png, 20.png, 21.png (POPBEA).
  *       Only the URLs are customizable per site.
  */
 
 // Platform configuration - CUSTOMIZE THESE LINKS FOR YOUR SITE
 const PLATFORMS_CONFIG = [
-    { id: 20, url: 'https://c7m1qz8x.com?ch=85303', name: 'EM BREVE' },
+    // POPBEA first in modal grid (gold card = index 0); replace URL with your tracked affiliate link if needed
+    { id: 21, url: 'https://popr8v6q4.com?ch=57378', name: 'EM BREVE' },
+    { id: 20, url: 'https://c7m1qz8x.com?ch=85303', name: 'POPSUR' },
     { id: 19, url: 'https://vaxelroq.com?ch=81737' },
     { id: 18, url: 'https://popluz6n.com?ch=40617', name: 'NEW PLATFORM' },
     { id: 1, url: 'https://popduqo.com?ch=23890' },

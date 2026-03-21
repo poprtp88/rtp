@@ -919,10 +919,10 @@ function setupPopupBanner() {
     const popupSlides     = document.querySelectorAll('.popup-carousel-slide');
     const popupRegisterBtn = document.getElementById('popupRegisterBtn');
 
-    /** href and register-button text for each slide */
+    /** href and register-button text for each slide (POPBEA ↔ POPSUR) */
     const popupSlideData = [
-        { href: 'https://c7m1qz8x.com?ch=85303', btnText: 'PARTICIPE AGORA - POPSUR' },
-        { href: 'https://00popzoe.com',     btnText: 'REGISTRAR AGORA - POPZOE' }
+        { href: 'https://popr8v6q4.com?ch=57378',        btnText: 'PARTICIPE AGORA - POPBEA' },
+        { href: 'https://c7m1qz8x.com?ch=85303', btnText: 'PARTICIPE AGORA - POPSUR' }
     ];
 
     let popupCurrent  = 0;
@@ -1031,14 +1031,16 @@ function generatePlatformCards() {
         const isGold = index === 0;
         const isPlatform19 = platform.id === 19;
         const isPlatform20 = platform.id === 20;
+        const isPlatform21 = platform.id === 21;
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
         
         card.setAttribute('data-url', platform.url);
         
         const isEmBreve = platform.name === 'EM BREVE' || (!platform.url || platform.url === '#');
-        // Platform 20 (PopSur) gets EM BREVE; Platform 19 (PopZoe) gets HOT
+        // Platform 20 (PopSur) HOT; Platform 19 (PopZoe) HOT; Platform 21 (POPBEA) EM BREVE
         const hotBadge = isPlatform19 ? '<div class="platform-hot">HOT</div>' : '';
-        const newPlatformHotBadge = isPlatform20 ? '<div class="platform-hot">EM BREVE</div>' : '';
+        const popsurHotBadge = isPlatform20 ? '<div class="platform-hot">HOT</div>' : '';
+        const popbeaEmBreveBadge = isPlatform21 ? '<div class="platform-hot">EM BREVE</div>' : '';
         
         // Use local asset path for platforms 18+ (not on CDN), CDN for 1-17
         const imagePath = platform.id >= 18 ? `asset/${platform.id}.png` : `${CDN_BASE}/asset/${platform.id}.png`;
@@ -1049,7 +1051,8 @@ function generatePlatformCards() {
         
         card.innerHTML = `
             ${hotBadge}
-            ${newPlatformHotBadge}
+            ${popsurHotBadge}
+            ${popbeaEmBreveBadge}
             <div class="platform-overlay"></div>
             <img src="${imagePath}" alt="Plataforma ${platform.id}" />
             ${statusOverlay}
