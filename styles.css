@@ -4281,6 +4281,66 @@ img, a {
 }
 
 /* ============================================
+   HORA-SINAL ROW (wrapper for hora-quente + retention-strip)
+   ============================================ */
+
+/* Mobile: stacked (default block flow) */
+.hora-sinal-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Desktop: side by side */
+@media (min-width: 1024px) {
+    .hora-sinal-row {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 8px;
+        margin: 8px 0 4px;
+    }
+
+    /* Each child takes equal space */
+    .hora-sinal-row .hora-quente-strip,
+    .hora-sinal-row .retention-strip {
+        flex: 1;
+        margin: 0;
+    }
+
+    /* Strip must fill full height of the row */
+    .hora-sinal-row .hora-quente-strip {
+        justify-content: center;
+    }
+
+    .hora-sinal-row .retention-strip {
+        /* sinal-do-dia-panel should stretch to fill */
+        align-items: stretch;
+    }
+
+    .hora-sinal-row .retention-strip .sinal-do-dia-panel {
+        flex: 1;
+        /* Match hora-quente-strip outline effect */
+        background: linear-gradient(135deg, rgba(255, 102, 0, 0.08), rgba(255, 215, 0, 0.06));
+        border: 2px solid #ffe600;
+        border-left: 2px solid #ffe600; /* override the default cyan left-border */
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(255, 230, 0, 0.55), inset 0 0 6px rgba(255, 230, 0, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Sweep animation mirror of hora-quente-strip::before */
+    .hora-sinal-row .retention-strip .sinal-do-dia-panel::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 150, 0, 0.05) 50%, transparent 100%);
+        animation: horaQuenteSweep 3s ease-in-out infinite;
+        pointer-events: none;
+    }
+}
+
+/* ============================================
    2 + 9 + 4. RETENTION STRIP
    ============================================ */
 
@@ -4352,20 +4412,7 @@ img, a {
     text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
 }
 
-/* Lucky Number */
-.lucky-number-panel {
-    flex: 0 0 auto;
-    background: linear-gradient(135deg, rgba(184,0,255,0.08), rgba(0,136,255,0.06));
-    border: 1px solid rgba(184, 0, 255, 0.25);
-    border-radius: 6px;
-    padding: 6px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1px;
-    min-width: 64px;
-}
+/* Lucky Number panel removed */
 
 /* Desktop-only ganhos clone lives in .timer-split-wrapper. It also has .ganhos-panel, which
    sets display:flex later in this file — single-class .ganhos-panel-desktop loses the cascade,
@@ -4381,41 +4428,12 @@ img, a {
         display: flex;
     }
 
-    /* Hide strip ganhos on desktop; lucky occupies that slot */
+    /* Hide strip ganhos on desktop (ganhos-panel-desktop in timer area handles it) */
     .retention-strip .ganhos-panel:not(.ganhos-panel-desktop) {
         display: none;
     }
-
-    /* Lucky + sinal share the row equally on desktop */
-    .retention-strip .lucky-number-panel {
-        flex: 1;
-        min-width: 0;
-    }
 }
 
-.lucky-label {
-    font-family: var(--font-mono);
-    font-size: 15px;
-    color: rgba(184, 0, 255, 0.8);
-    letter-spacing: 1px;
-    text-align: center;
-}
-
-.lucky-number {
-    font-family: var(--font-primary);
-    font-size: 22px;
-    font-weight: 900;
-    color: #b800ff;
-    text-shadow: 0 0 14px rgba(184, 0, 255, 0.7);
-    line-height: 1;
-}
-
-.lucky-mult {
-    font-family: var(--font-mono);
-    font-size: 15px;
-    color: rgba(184, 0, 255, 0.7);
-    font-weight: 700;
-}
 
 /* Ganhos de Hoje */
 .ganhos-panel {
@@ -4796,13 +4814,6 @@ img, a {
     .sinal-body  { font-size: 9px; gap: 4px; }
     .sinal-game  { font-size: 10px; }
 
-    .lucky-number-panel {
-        padding: 5px 7px;
-        min-width: 52px;
-    }
-    .lucky-number { font-size: 18px; }
-    .lucky-label, .lucky-mult { font-size: 6px; }
-
     .ganhos-panel { padding: 6px 10px; }
     .ganhos-label { font-size: 9px; }
     .ganhos-value { font-size: 18px; }
@@ -5099,6 +5110,28 @@ img, a {
 .clean-theme .carousel-dots .dot.active { background: var(--c-accent); box-shadow: none; width: 20px; }
 
 /* ── Hora quente strip ── */
+/* On desktop the hora-sinal-row manages margin; strip resets its own */
+@media (min-width: 1024px) {
+    .clean-theme .hora-sinal-row .hora-quente-strip,
+    .clean-theme .hora-sinal-row .retention-strip {
+        margin: 0;
+    }
+
+    /* Mirror hora-quente-strip outline onto sinal-do-dia-panel in clean-theme */
+    .clean-theme .hora-sinal-row .retention-strip .sinal-do-dia-panel {
+        background: var(--c-card);
+        border: 2px solid #ffe600;
+        border-left: 2px solid #ffe600;
+        border-radius: var(--c-radius);
+        box-shadow: 0 0 10px rgba(255, 230, 0, 0.55), inset 0 0 6px rgba(255, 230, 0, 0.08);
+    }
+
+    /* Suppress the sweep animation in clean-theme (consistent with hora-quente-strip::before suppression) */
+    .clean-theme .hora-sinal-row .retention-strip .sinal-do-dia-panel::before {
+        display: none;
+    }
+}
+
 .clean-theme .hora-quente-strip {
     background: var(--c-card);
     border: 2px solid #ffe600;
@@ -5142,16 +5175,6 @@ img, a {
 .clean-theme .sinal-rtp strong { color: var(--c-accent); }
 .clean-theme .sinal-mult { color: var(--c-gold); text-shadow: none; }
 
-.clean-theme .lucky-number-panel {
-    background: var(--c-card);
-    border: 1px solid var(--c-border);
-    border-radius: var(--c-radius);
-    box-shadow: none;
-}
-.clean-theme .lucky-label { color: var(--c-muted); }
-.clean-theme .lucky-number { color: var(--c-accent2); text-shadow: none; }
-.clean-theme .lucky-mult { color: var(--c-dim); }
-
 .clean-theme .ganhos-panel {
     background: var(--c-card);
     border: 1px solid var(--c-border);
@@ -5161,6 +5184,144 @@ img, a {
 .clean-theme .ganhos-label { color: var(--c-muted); }
 .clean-theme .ganhos-value { color: var(--c-accent); text-shadow: none; }
 .clean-theme .ganhos-sub { color: var(--c-dim); }
+
+/* ── Jogo Responsável page ── */
+.clean-theme .status-link {
+    color: var(--c-accent);
+    font-family: var(--c-font);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.clean-theme .status-link:hover {
+    color: var(--c-text);
+    text-decoration: none;
+}
+
+.clean-theme .responsible-gaming-content {
+    padding: 24px 0 48px;
+}
+
+.clean-theme .rg-section {
+    margin-bottom: 28px;
+}
+
+.clean-theme .rg-section-header {
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--c-border);
+}
+
+.clean-theme .rg-icon {
+    color: var(--c-accent);
+    font-size: 13px;
+}
+
+.clean-theme .rg-title {
+    font-family: var(--c-font);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.clean-theme .rg-card {
+    background: var(--c-card);
+    border: 1px solid var(--c-border);
+    border-left: 3px solid var(--c-accent);
+    border-radius: var(--c-radius);
+    padding: 16px 18px;
+    box-shadow: none;
+}
+
+.clean-theme .rg-text {
+    font-family: var(--c-font);
+    color: var(--c-muted);
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+.clean-theme .rg-text strong {
+    color: var(--c-text);
+    font-weight: 700;
+}
+
+.clean-theme .rg-intro {
+    font-family: var(--c-font);
+    color: var(--c-muted);
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+
+.clean-theme .rg-checklist li {
+    font-family: var(--c-font);
+    color: var(--c-muted);
+    font-size: 14px;
+    padding: 8px 8px 8px 28px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.clean-theme .rg-checklist li:hover {
+    background: rgba(34, 201, 151, 0.05);
+}
+
+.clean-theme .rg-checklist li::before {
+    color: var(--c-accent);
+    font-size: 12px;
+}
+
+.clean-theme .rg-disclaimer {
+    margin-top: 16px;
+    color: var(--c-gold);
+    font-family: var(--c-font);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.clean-theme .rg-disclaimer strong {
+    color: var(--c-gold);
+}
+
+.clean-theme .rg-link {
+    background: var(--c-card);
+    border: 1px solid var(--c-border);
+    border-radius: var(--c-radius);
+    color: var(--c-accent);
+    font-family: var(--c-font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 16px;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.clean-theme .rg-link:hover {
+    border-color: var(--c-accent);
+    background: rgba(34, 201, 151, 0.07);
+    color: var(--c-text);
+}
+
+.clean-theme .rg-tips li {
+    font-family: var(--c-font);
+    color: var(--c-muted);
+    font-size: 14px;
+    padding: 7px 8px 7px 0;
+    border-bottom: 1px solid var(--c-border);
+    gap: 12px;
+}
+
+.clean-theme .rg-tips li:last-child {
+    border-bottom: none;
+}
+
+.clean-theme .tip-bullet {
+    color: var(--c-accent);
+    font-size: 13px;
+    margin-top: 1px;
+}
 
 /* ── Provider selector ── */
 .clean-theme .provider-selector {
@@ -5523,7 +5684,6 @@ background: var(--c-card);
     /* Retention strip — wrap */
     .clean-theme .retention-strip { flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; }
     .clean-theme .sinal-do-dia-panel { padding: 6px 8px; }
-    .clean-theme .lucky-number-panel { padding: 5px 8px; min-width: 52px; }
     .clean-theme .ganhos-panel { padding: 5px 8px; }
 
     /* Provider */
