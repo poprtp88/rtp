@@ -110,15 +110,15 @@
 const CDN_BASE = 'https://poprtp88.github.io/TEST-RTP-BARU-2';
 
 // ============================================
-// DEBUG: Check for external platforms config
+// DEBUG: Verificando config de plataformas
 // ============================================
-console.log('🔍 SCRIPT.JS LOADED - Checking for PLATFORMS_CONFIG...');
+console.log('🔍 script.js carregado — checando PLATFORMS_CONFIG...');
 console.log('🔍 typeof PLATFORMS_CONFIG:', typeof PLATFORMS_CONFIG);
 if (typeof PLATFORMS_CONFIG !== 'undefined') {
-    console.log('✅ PLATFORMS_CONFIG FOUND! Length:', PLATFORMS_CONFIG.length);
-    console.log('✅ First platform URL:', PLATFORMS_CONFIG[0]?.url);
+    console.log('✅ PLATFORMS_CONFIG encontrado! Total:', PLATFORMS_CONFIG.length);
+    console.log('✅ Primeira plataforma:', PLATFORMS_CONFIG[0]?.url);
 } else {
-    console.log('⚠️ PLATFORMS_CONFIG NOT FOUND - will use defaults');
+    console.log('⚠️ PLATFORMS_CONFIG não encontrado — usando padrão');
 }
 
 const CONFIG = {
@@ -166,11 +166,11 @@ const CONFIG = {
 // Directly assign platforms based on whether external config exists
 if (typeof PLATFORMS_CONFIG !== 'undefined' && Array.isArray(PLATFORMS_CONFIG) && PLATFORMS_CONFIG.length > 0) {
     CONFIG.platforms = PLATFORMS_CONFIG;
-    console.log('✅✅✅ USING EXTERNAL PLATFORMS:', PLATFORMS_CONFIG.length, 'platforms');
-    console.log('✅ First platform:', PLATFORMS_CONFIG[0]);
+    console.log('✅ Usando plataformas externas:', PLATFORMS_CONFIG.length, 'no total');
+    console.log('✅ Primeira plataforma:', PLATFORMS_CONFIG[0]);
 } else {
     CONFIG.platforms = CONFIG.defaultPlatforms;
-    console.log('⚠️⚠️⚠️ USING DEFAULT PLATFORMS (no external config)');
+    console.log('⚠️ Sem config externo — usando plataformas padrão');
 }
 
 // Estado da aplicação
@@ -212,8 +212,8 @@ function getTimeSeed() {
                         roundedMinute;
     
     // Debug logging to track seed changes
-    console.log(`🕐 TimeSeed Debug (São Paulo): Minuto=${currentMinute}, Arredondado=${roundedMinute}, Seed=${totalMinutes}`);
-    console.log(`📍 Hora Local: ${new Date().toLocaleTimeString('pt-BR')}`);
+    console.log(`🕐 TimeSeed debug (SP): Minuto=${currentMinute}, Arredondado=${roundedMinute}, Seed=${totalMinutes}`);
+    console.log(`📍 Hora local: ${new Date().toLocaleTimeString('pt-BR')}`);
     console.log(`📍 Hora São Paulo: ${saoPauloTime.toLocaleTimeString('pt-BR')}`);
     
     return totalMinutes;
@@ -241,6 +241,33 @@ function stringToHash(str) {
         hash = hash & hash;
     }
     return Math.abs(hash);
+}
+
+// ============================================
+// SESSION GRID SHUFFLE
+// Randomizes card display order on each page load without touching game.id or RTP.
+// ============================================
+
+/**
+ * One-time session seed — changes every page load so the grid order is always fresh.
+ * Uses performance.now() for sub-millisecond entropy on top of Date.now().
+ */
+const SESSION_GRID_SEED = (Date.now() ^ Math.floor((performance.now() % 1) * 1e9)) >>> 0;
+
+/**
+ * Seeded Fisher-Yates shuffle — returns a new array in randomized order.
+ * Inputs: arr — array to shuffle; seed — integer seed.
+ * Output: new shuffled array (original is not mutated).
+ */
+function seededShuffle(arr, seed) {
+    const out = arr.slice();
+    for (let i = out.length - 1; i > 0; i--) {
+        // LCG step for each swap position
+        seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+        const j = seed % (i + 1);
+        const tmp = out[i]; out[i] = out[j]; out[j] = tmp;
+    }
+    return out;
 }
 
 function generateRandomRTP(gameId) {
@@ -471,11 +498,11 @@ function startCountdownTimer() {
             setTimeout(() => {
                 const currentTimeSeed = getTimeSeed();
                 console.log('═══════════════════════════════════════');
-                console.log('🔄 ATUALIZAÇÃO DE RTP INICIADA (São Paulo Time)');
-                console.log(`⏰ TimeSeed NOVO: ${currentTimeSeed}`);
-                console.log(`📅 Minuto São Paulo: ${currentMinute}, Bloco: ${currentThreeMinuteBlock}`);
-                console.log(`🌎 Hora São Paulo: ${saoPauloTime.toLocaleTimeString('pt-BR')}`);
-                console.log('🎮 Recalculando RTP de TODOS os jogos...');
+                console.log('🔄 ATUALIZANDO RTP (Hora São Paulo)');
+                console.log(`⏰ TimeSeed novo: ${currentTimeSeed}`);
+                console.log(`📅 Minuto SP: ${currentMinute}, Bloco: ${currentThreeMinuteBlock}`);
+                console.log(`🌎 Hora SP: ${saoPauloTime.toLocaleTimeString('pt-BR')}`);
+                console.log('🎮 Recalculando RTP de todos os jogos...');
                 console.log('═══════════════════════════════════════');
                 
                 renderGameCards();
@@ -483,8 +510,8 @@ function startCountdownTimer() {
                 updateCycleCount();
                 updateLastRefresh();
                 
-                console.log('✅ RTP atualizado! Valores devem estar DIFERENTES agora.');
-                console.log('✅ Todos os usuários no mundo veem os mesmos valores!');
+                console.log('✅ RTP atualizado! Valores novos agora.');
+                console.log('✅ Todos os usuários veem os mesmos valores!');
             }, 100); // 100ms delay to ensure we're in the new minute
         }
     }, 100);
@@ -525,14 +552,15 @@ async function loadAllGames() {
                     allGames = window.sortGamesByPopularity(allGames);
                     console.log(`✅ ${allGames.length} jogos carregados e ordenados por popularidade`);
                 } else {
-                    console.log(`✅ ${allGames.length} jogos carregados dinamicamente`);
+                    console.log(`✅ ${allGames.length} jogos carregados`);
                 }
                 
+                window._allGames = allGames;
                 return;
             }
         }
     } catch (error) {
-        console.warn('⚠️ API PHP indisponível, usando método alternativo...');
+        console.warn('⚠️ API PHP fora do ar, usando método alternativo...');
     }
     
     if (window.PROVIDER_IMAGES) {
@@ -560,10 +588,11 @@ async function loadAllGames() {
             console.log(`✅ ${allGames.length} jogos carregados`);
         }
         
+        window._allGames = allGames;
         return;
     }
     
-    console.error('❌ Erro ao carregar jogos');
+    console.error('❌ Erro ao carregar jogos — nenhum jogo encontrado');
 }
 
 function filterGamesByProvider(provider) {
@@ -635,8 +664,8 @@ function renderGameCards() {
     if (!gamesGrid) return;
     
     const filteredGames = filterGamesByProvider(currentProvider);
-    // Apply pagination limit
-    const gamesToDisplay = filteredGames.slice(0, visibleLimit);
+    // Apply pagination limit, then shuffle display order (game.id / RTP are unaffected)
+    const gamesToDisplay = seededShuffle(filteredGames.slice(0, visibleLimit), SESSION_GRID_SEED);
     
     // Add pulse animation to grid on refresh
     gamesGrid.classList.add('refreshing');
@@ -671,14 +700,14 @@ function setupLoadMore() {
         loadMoreBtn.addEventListener('click', () => {
             visibleLimit += GAMES_PER_PAGE;
             renderGameCards();
-            console.log(`📥 Carregando mais jogos... Limite atual: ${visibleLimit}`);
+            console.log(`📥 Carregando mais jogos... total visível: ${visibleLimit}`);
         });
     }
 }
 
 function updateGameCounter(displayed, total) {
     // Game counter elements were removed with the FILTRO section
-    console.log(`📊 Jogos exibidos: ${displayed}/${total}`);
+    console.log(`📊 Jogos na tela: ${displayed}/${total}`);
 }
 
 // ============================================
@@ -726,7 +755,7 @@ function setupCarousel() {
     
     setInterval(nextSlide, 5000);
     
-    console.log('✅ Carrossel inicializado');
+    console.log('✅ Carrossel iniciado');
 }
 
 // ============================================
@@ -789,7 +818,7 @@ function setupSideBannerCarousel() {
     // Initial update
     updateSideBanner();
     
-    console.log('✅ Side banner carousel inicializado');
+    console.log('✅ Carrossel lateral iniciado');
 }
 
 // ============================================
@@ -829,7 +858,7 @@ function setupProviderMenu() {
             renderGameCards();
             providerMenu.classList.remove('active');
             
-            console.log(`🎮 Filtro alterado para: ${provider}`);
+            console.log(`🎮 Filtro trocado pra: ${provider}`);
         });
     });
     
@@ -839,7 +868,7 @@ function setupProviderMenu() {
         }
     });
     
-    console.log('✅ Menu de provedores inicializado');
+    console.log('✅ Menu de provedores pronto');
 }
 
 // ============================================
@@ -856,7 +885,7 @@ function setupPopupBanner() {
     const popupContainer = document.getElementById('popupBannerContainer');
     
     if (!popupOverlay || !popupClose || !popupContainer) {
-        console.warn('⚠️ Popup banner elements not found');
+        console.warn('⚠️ Elementos do popup não encontrados');
         return;
     }
     
@@ -870,7 +899,7 @@ function setupPopupBanner() {
         // Shockwave effects are handled automatically by CSS animations
         // They run continuously with periodic timing (slow, thin waves)
         
-        console.log('📢 Popup banner opened');
+        console.log('📢 Popup aberto');
     }
     
     /**
@@ -879,7 +908,7 @@ function setupPopupBanner() {
     function closePopupBanner() {
         popupOverlay.classList.remove('active');
         document.body.style.overflow = '';
-        console.log('📢 Popup banner closed');
+        console.log('📢 Popup fechado');
     }
     
     /**
@@ -919,9 +948,9 @@ function setupPopupBanner() {
     const popupSlides     = document.querySelectorAll('.popup-carousel-slide');
     const popupRegisterBtn = document.getElementById('popupRegisterBtn');
 
-    /** href and register-button text for each slide (POPBEA ↔ POPSUR) */
+    /** href and register-button text for each slide */
     const popupSlideData = [
-        { href: 'https://popr8v6q4.com?ch=57378',        btnText: 'PARTICIPE AGORA - POPBEA' },
+        { href: 'https://popr8v6q4.com?ch=57378', btnText: 'REGISTRAR AGORA - POPBEA' },
         { href: 'https://c7m1qz8x.com?ch=85303', btnText: 'PARTICIPE AGORA - POPSUR' }
     ];
 
@@ -1010,7 +1039,7 @@ function setupPopupBanner() {
     window.openPopupBanner = openPopupBanner;
     window.closePopupBanner = closePopupBanner;
     
-    console.log('✅ Popup banner system initialized');
+    console.log('✅ Sistema de popup pronto');
 }
 
 // ============================================
@@ -1036,11 +1065,10 @@ function generatePlatformCards() {
         
         card.setAttribute('data-url', platform.url);
         
-        const isEmBreve = platform.name === 'EM BREVE' || (!platform.url || platform.url === '#');
-        // Platform 20 (PopSur) HOT; Platform 19 (PopZoe) HOT; Platform 21 (POPBEA) EM BREVE
-        const hotBadge = isPlatform19 ? '<div class="platform-hot">HOT</div>' : '';
-        const popsurHotBadge = isPlatform20 ? '<div class="platform-hot">HOT</div>' : '';
-        const popbeaEmBreveBadge = isPlatform21 ? '<div class="platform-hot">EM BREVE</div>' : '';
+        const isEmBreve = !platform.url || platform.url === '#';
+        // Platform 21 / 19 (PopBea assets): HOT badge
+        const hotBadge = (isPlatform19 || isPlatform21) ? '<div class="platform-hot">HOT</div>' : '';
+        const newPlatformHotBadge = '';
         
         // Use local asset path for platforms 18+ (not on CDN), CDN for 1-17
         const imagePath = platform.id >= 18 ? `asset/${platform.id}.png` : `${CDN_BASE}/asset/${platform.id}.png`;
@@ -1051,8 +1079,7 @@ function generatePlatformCards() {
         
         card.innerHTML = `
             ${hotBadge}
-            ${popsurHotBadge}
-            ${popbeaEmBreveBadge}
+            ${newPlatformHotBadge}
             <div class="platform-overlay"></div>
             <img src="${imagePath}" alt="Plataforma ${platform.id}" />
             ${statusOverlay}
@@ -1065,7 +1092,7 @@ function generatePlatformCards() {
             
             // Don't redirect if URL is empty or '#'
             if (!url || url === '#') {
-                console.log(`🚫 Plataforma em breve - redirecionamento desabilitado`);
+                console.log(`🚫 Plataforma em breve — redirecionamento desabilitado`);
                 return;
             }
             
@@ -1134,7 +1161,7 @@ function setupPlatformModal() {
         }
     });
     
-    console.log('✅ Modal de plataformas inicializado');
+    console.log('✅ Modal de plataformas pronto');
 }
 
 // ============================================
@@ -1145,10 +1172,10 @@ async function init() {
     console.log('═══════════════════════════════════════');
     console.log('🎰 POP REDE - SISTEMA RTP v2.0');
     console.log('═══════════════════════════════════════');
-    console.log('🇧🇷 Modo: Português Brasileiro');
-    console.log('📱 Otimização: Mobile-First');
-    console.log('🔲 Imagens: Quadradas (1:1)');
-    console.log('👆 Modo: Click para Registrar');
+    console.log('🇧🇷 Linguagem: Português Brasileiro');
+    console.log('📱 Otimizado pra mobile');
+    console.log('🔲 Imagens: 1:1');
+    console.log('👆 Modo: clique pra registrar');
     console.log('═══════════════════════════════════════');
     
     const gamesGrid = document.getElementById('gamesGrid');
@@ -1159,7 +1186,7 @@ async function init() {
     await loadAllGames();
     
     if (allGames.length === 0) {
-        console.error('❌ ERRO: Nenhum jogo carregado');
+        console.error('❌ ERRO: Nenhum jogo carregado — verifica a conexão');
         if (gamesGrid) {
             gamesGrid.innerHTML = '<p style="color: #ff0055; padding: 20px; text-align: center; font-family: monospace;">❌ ERRO: Nenhum jogo encontrado</p>';
         }
@@ -1190,9 +1217,9 @@ async function init() {
     updateCycleCount();
     updateLastRefresh();
     
-    console.log('✅ SISTEMA ONLINE');
-    console.log(`📊 Total de Jogos: ${allGames.length}`);
-    console.log('🔄 Intervalo de Atualização: 10 minutos');
+    console.log('✅ SISTEMA ON');
+    console.log(`📊 Total de jogos: ${allGames.length}`);
+    console.log('🔄 Atualiza a cada 3 minutos');
     console.log('═══════════════════════════════════════');
     
     // Estatísticas
@@ -1200,7 +1227,7 @@ async function init() {
     allGames.forEach(game => {
         providerCounts[game.provider] = (providerCounts[game.provider] || 0) + 1;
     });
-    console.log('📈 Distribuição por Provedor:', providerCounts);
+    console.log('📈 Por provedor:', providerCounts);
     
     const priorityCounts = [0, 0, 0, 0, 0, 0, 0];
     allGames.forEach(game => {
@@ -1208,20 +1235,20 @@ async function init() {
             priorityCounts[game.priority]++;
         }
     });
-    console.log('🎯 Distribuição por Prioridade:', {
+    console.log('🎯 Por prioridade:', {
         'Prioridade 1 (FORTUNE)': priorityCounts[1],
         'Prioridade 2 (POPULAR)': priorityCounts[2],
         'Prioridade 3 (DESTAQUE)': priorityCounts[3],
         'Prioridade 4+': priorityCounts[4] + priorityCounts[5] + priorityCounts[6]
     });
     
-    console.log('🔥 Top 10 Jogos:');
+    console.log('🔥 Top 10 jogos:');
     allGames.slice(0, 10).forEach((game, i) => {
         console.log(`  ${i + 1}. [P${game.priority}] ${game.imageName} (${game.provider})`);
     });
     
     console.log('═══════════════════════════════════════');
-    console.log('✅ SISTEMA PRONTO PARA USO');
+    console.log('✅ SISTEMA PRONTO — bora!');
     console.log('═══════════════════════════════════════');
 }
 

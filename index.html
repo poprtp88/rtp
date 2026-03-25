@@ -35,10 +35,11 @@
     <link rel="shortcut icon" href="asset/favicon/favicon.jpg" type="image/jpeg">
     <link rel="icon" href="asset/favicon/favicon.jpg" type="image/jpeg">
     <link rel="apple-touch-icon" href="asset/favicon/favicon.jpg">
+    <script src="protect.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV01P9NMZL"></script>
@@ -50,7 +51,33 @@
   gtag('config', 'G-PV01P9NMZL');
 </script>
 
-<body>
+<body class="clean-theme">
+    <!-- Hacker Loading Screen -->
+    <div class="hacker-loading-overlay" id="hackerLoadingOverlay">
+        <div class="hacker-terminal">
+            <div class="hacker-terminal-header">
+                <span class="hacker-dot hacker-dot-red"></span>
+                <span class="hacker-dot hacker-dot-yellow"></span>
+                <span class="hacker-dot hacker-dot-green"></span>
+                <span class="hacker-terminal-title">root@poprede — bash</span>
+            </div>
+            <div class="hacker-logo">
+                <span class="hacker-logo-bracket">[</span>
+                <span class="hacker-logo-text">POP RTP</span>
+                <span class="hacker-logo-bracket">]</span>
+                <div class="hacker-logo-sub">SISTEMA DE ANÁLISE RTP v8.9.1</div>
+            </div>
+            <div class="hacker-terminal-body" id="hackerTerminalBody"></div>
+            <div class="hacker-progress-bar">
+                <div class="hacker-progress-fill" id="hackerProgressFill"></div>
+            </div>
+            <div class="hacker-progress-text" id="hackerProgressText">0%</div>
+        </div>
+    </div>
+
+    <!-- Win Toast Container -->
+    <div class="win-toast-container" id="winToastContainer"></div>
+
     <!-- Terminal Background Effect -->
     <div class="terminal-bg">
         <div class="grid-overlay"></div>
@@ -60,18 +87,28 @@
 
     <!-- System Status Bar -->
     <div class="system-status-bar">
-        <div class="status-group">
+        <!-- Left -->
+        <div class="status-group status-group-left">
             <div class="status-item">
                 <span class="status-icon">●</span>
-                <span class="status-label">SISTEMA:</span>
-                <span class="status-value status-online">ONLINE</span>
+                <span class="status-label">SISTEMA</span>
+                <span class="status-value status-online">VÁLIDO</span>
             </div>
             <div class="status-item">
                 <span class="status-label">SYNC:</span>
                 <span class="status-value" id="syncStatus">SINCRONIZADO</span>
             </div>
         </div>
-        <div class="status-group">
+
+        <!-- Center — online count -->
+        <div class="status-item status-item-center">
+            <span class="status-icon online-pulse">●</span>
+            <span class="status-label">ONLINE:</span>
+            <span class="status-value status-online" id="onlineViewerCount">0</span>
+        </div>
+
+        <!-- Right -->
+        <div class="status-group status-group-right">
             <div class="status-item">
                 <span class="status-label">PRÓX.:</span>
                 <span class="status-value" id="nextUpdate">--:--</span>
@@ -81,6 +118,12 @@
                 <span class="status-value" id="activeGames">623</span>
             </div>
         </div>
+    </div>
+
+    <!-- Live Activity Ticker -->
+    <div class="live-activity-bar">
+        <span class="live-activity-label">LIVE</span>
+        <span class="live-activity-text" id="liveActivityTicker">🟢 Sistema online — carregando dados...</span>
     </div>
 
     <!-- Terminal Command Header -->
@@ -94,20 +137,24 @@
                 <div class="header-left">
                     <div class="logo-container">
                         <span class="logo-bracket">[</span>l
-                        <span class="logo-text">POP REDE</span>
+                        <span class="logo-text">POP REDE - BEST RTP</span>
                         <span class="logo-bracket">]</span>
                     </div>
-                    <div class="version-tag">v8.9.1-BR</div>
+                    <div class="version-tag">OFFICIAL</div>
                 </div>
                 <div class="header-center">
                     <h1 class="main-title">
-                        <span class="title-prefix">///</span>
-                        POP RTP - BEST RTP
+
                         <span class="title-suffix">///</span>
                     </h1>
-                    <div class="subtitle">JOGO RTP EM TEMPO REAL</div>
+                    <div class="subtitle">SISTEMA DE ANÁLISE RTP v8.9.1</div>
                 </div>
                 <div class="header-right">
+                    <div class="online-counter-badge">
+                        <span class="online-badge-dot"></span>
+                        <span class="online-badge-count" id="onlineViewerCountHeader">0</span>
+                        <span class="online-badge-label">online</span>
+                    </div>
                     <div class="system-info">
                         <div class="info-item">
                             <span class="info-label">UPTIME:</span>
@@ -131,6 +178,31 @@
                 <!-- Timer and Side Banner Section (Desktop Split) -->
                 <section class="timer-section">
                     <div class="timer-split-wrapper">
+                        <!-- Mobile-only: 5-image rotating banner strip (JS-driven image-slide carousel) -->
+                        <div class="mobile-banner-row" id="mobileBannerRow">
+                            <!-- Each .mb-item container stays fixed; only the <img> elements inside slide -->
+                            <a href="https://c7m1qz8x.com?ch=85303" class="mb-item mb-square" data-platform="1" target="_blank" rel="noopener">
+                                <img class="mb-img mb-img-cur" src="sidebanner/SQUARE (1).png" alt="PopSur">
+                                <img class="mb-img mb-img-nxt" src="" alt="" aria-hidden="true">
+                            </a>
+                            <a href="https://popr8v6q4.com?ch=57378" class="mb-item mb-square" data-platform="2" target="_blank" rel="noopener">
+                                <img class="mb-img mb-img-cur" src="sidebanner/SQUARE (2).png" alt="PopBea">
+                                <img class="mb-img mb-img-nxt" src="" alt="" aria-hidden="true">
+                            </a>
+                            <a href="https://popr8v6q4.com?ch=57378" class="mb-item mb-long" data-platform="3" target="_blank" rel="noopener">
+                                <img class="mb-img mb-img-cur" src="sidebanner/LONG (3).png" alt="PopVai">
+                                <img class="mb-img mb-img-nxt" src="" alt="" aria-hidden="true">
+                            </a>
+                            <a href="https://popluz6n.com?ch=40617" class="mb-item mb-square" data-platform="4" target="_blank" rel="noopener">
+                                <img class="mb-img mb-img-cur" src="sidebanner/SQUARE (4).png" alt="PopLuz">
+                                <img class="mb-img mb-img-nxt" src="" alt="" aria-hidden="true">
+                            </a>
+                            <a href="https://popr8v6q4.com?ch=57378" class="mb-item mb-square" data-platform="5" target="_blank" rel="noopener">
+                                <img class="mb-img mb-img-cur" src="sidebanner/SQUARE (5).png" alt="PopZoe">
+                                <img class="mb-img mb-img-nxt" src="" alt="" aria-hidden="true">
+                            </a>
+                        </div>
+
                         <!-- Timer Container -->
                         <div class="timer-container">
                             <div class="timer-display" id="countdownTimer">
@@ -148,24 +220,31 @@
                             </div>
                         </div>
                         
-                        <!-- Side Banner: alternates POPBEA ↔ POPSUR (desktop timer split) -->
+                        <!-- Desktop-only: Side Banner Carousel -->
                         <div class="side-banner-container side-banner-link">
                             <div class="side-banner-carousel">
                                 <div class="side-banner-track" id="sideBannerTrack">
                                     <div class="side-banner-slide active">
                                         <a href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
-                                            <img src="asset/21.png" alt="POPBEA">
-                                            <div class="platform-hot">NOVO</div>
+                                            <img src="asset/21.png" alt="PopBea">
+                                            <div class="platform-hot">HOT</div>
                                         </a>
                                     </div>
                                     <div class="side-banner-slide">
                                         <a href="https://c7m1qz8x.com?ch=85303" target="_blank" rel="noopener">
-                                            <img src="asset/20.png" alt="PopSur">
+                                            <img src="asset/20.png" alt="PopSur - Em Breve">
                                             <div class="platform-hot">EM BREVE</div>
                                         </a>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Desktop-only: Ganhos panel (clone synced by JS; strip shows lucky instead) -->
+                        <div class="ganhos-panel ganhos-panel-desktop">
+                            <div class="ganhos-label">💰 GANHOS HOJE</div>
+                            <div class="ganhos-value" id="ganhosDoDiaValueDesktop">R$ —</div>
+                            <div class="ganhos-sub">pelos usuários</div>
                         </div>
                     </div>
                 </section>
@@ -174,49 +253,48 @@
                 <section class="banner-carousel">
                 <div class="carousel-container">
                     <div class="carousel-track" id="carouselTrack">
-                        <!-- Pattern: POPBEA → POPSUR → POPBEA → POPSUR … -->
                         <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
-                            <img src="banner/POPBEA (1).jpg" alt="POPBEA - Nova Plataforma" loading="eager">
+                            <img src="banner/POPBEA (1).jpg" alt="PopBea - Nova Plataforma" loading="eager">
+                            <div class="carousel-overlay"></div>
+                        </a>
+                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
+                            <img src="banner/POPBEA (2).jpg" alt="PopBea - Melhor RTP" loading="lazy">
+                            <div class="carousel-overlay"></div>
+                        </a>
+                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
+                            <img src="banner/POPBEA (3).jpg" alt="PopBea - Jogos em Tempo Real" loading="lazy">
+                            <div class="carousel-overlay"></div>
+                        </a>
+                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
+                            <img src="banner/POPBEA (4).jpg" alt="PopBea - Cassino Online" loading="lazy">
+                            <div class="carousel-overlay"></div>
+                        </a>
+                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
+                            <img src="banner/POPBEA (5).jpg" alt="PopBea - RTP Profissional" loading="lazy">
+                            <div class="carousel-overlay"></div>
+                        </a>
+                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
+                            <img src="banner/POPBEA (6).jpg" alt="PopBea - Comece Agora" loading="lazy">
                             <div class="carousel-overlay"></div>
                         </a>
                         <a class="carousel-slide" href="https://c7m1qz8x.com?ch=85303" target="_blank" rel="noopener">
                             <img src="banner/popsur (1).jpg" alt="PopSur - Nova Plataforma" loading="lazy">
                             <div class="carousel-overlay"></div>
                         </a>
-                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
-                            <img src="banner/POPBEA (2).jpg" alt="POPBEA - Melhor RTP" loading="lazy">
-                            <div class="carousel-overlay"></div>
-                        </a>
                         <a class="carousel-slide" href="https://c7m1qz8x.com?ch=85303" target="_blank" rel="noopener">
                             <img src="banner/popsur (2).jpg" alt="PopSur - Melhor RTP" loading="lazy">
-                            <div class="carousel-overlay"></div>
-                        </a>
-                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
-                            <img src="banner/POPBEA (3).jpg" alt="POPBEA - Jogos em Tempo Real" loading="lazy">
                             <div class="carousel-overlay"></div>
                         </a>
                         <a class="carousel-slide" href="https://c7m1qz8x.com?ch=85303" target="_blank" rel="noopener">
                             <img src="banner/popsur (3).jpg" alt="PopSur - Jogos em Tempo Real" loading="lazy">
                             <div class="carousel-overlay"></div>
                         </a>
-                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
-                            <img src="banner/POPBEA (4).jpg" alt="POPBEA - Cassino Online" loading="lazy">
-                            <div class="carousel-overlay"></div>
-                        </a>
                         <a class="carousel-slide" href="https://c7m1qz8x.com?ch=85303" target="_blank" rel="noopener">
                             <img src="banner/popsur (4).jpg" alt="PopSur - Cassino Online" loading="lazy">
                             <div class="carousel-overlay"></div>
                         </a>
-                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
-                            <img src="banner/POPBEA (5).jpg" alt="POPBEA - RTP Profissional" loading="lazy">
-                            <div class="carousel-overlay"></div>
-                        </a>
                         <a class="carousel-slide" href="https://c7m1qz8x.com?ch=85303" target="_blank" rel="noopener">
                             <img src="banner/popsur (5).jpg" alt="PopSur - RTP Profissional" loading="lazy">
-                            <div class="carousel-overlay"></div>
-                        </a>
-                        <a class="carousel-slide" href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener">
-                            <img src="banner/POPBEA (6).jpg" alt="POPBEA - Comece Agora" loading="lazy">
                             <div class="carousel-overlay"></div>
                         </a>
                         <a class="carousel-slide" href="https://c7m1qz8x.com?ch=85303" target="_blank" rel="noopener">
@@ -250,6 +328,42 @@
                 </section>
             </div>
 
+
+            <!-- Horário Quente Strip -->
+            <div class="hora-quente-strip" id="horaQuenteStrip">
+                <span class="hora-quente-fire">🔥</span>
+                <span class="hora-quente-label" id="horaQuenteLabel">PRÓXIMO HORÁRIO QUENTE:</span>
+                <span class="hora-quente-time" id="horaQuenteTime">21:00</span>
+                <span class="hora-quente-countdown" id="horaQuenteCountdown">— em --:--</span>
+                <span class="hora-quente-aproveita">Aproveita — tá pagando demais</span>
+            </div>
+
+            <!-- Sinal do Dia + Lucky Number Strip -->
+            <div class="retention-strip">
+                <!-- Sinal do Dia -->
+                <div class="sinal-do-dia-panel" id="sinalDoDiaPanel">
+                    <div class="sinal-badge">📡 SINAL DO DIA</div>
+                    <div class="sinal-body">
+                        <span class="sinal-game" id="sinalGameName">—</span>
+                        <span class="sinal-sep">·</span>
+                        <span class="sinal-rtp">RTP <strong id="sinalRTP">—</strong></span>
+                        <span class="sinal-sep">·</span>
+                        <span class="sinal-mult" id="sinalMult">—</span>
+                    </div>
+                </div>
+                <!-- Lucky Number -->
+                <div class="lucky-number-panel">
+                    <div class="lucky-label">🎲 SEU NÚMERO</div>
+                    <div class="lucky-number" id="luckyNumberDisplay">—</div>
+                    <div class="lucky-mult" id="luckyMultDisplay">—</div>
+                </div>
+                <!-- Ganhos de Hoje -->
+                <div class="ganhos-panel">
+                    <div class="ganhos-label">💰 GANHOS HOJE</div>
+                    <div class="ganhos-value" id="ganhosDoDiaValue">R$ —</div>
+                    <div class="ganhos-sub">pelos usuários</div>
+                </div>
+            </div>
 
             <!-- Provider Filter -->
             <section class="provider-section">
@@ -344,22 +458,22 @@
                     <div class="console-body">
                         <div class="console-line">
                             <span class="console-prompt">[SISTEMA]</span>
-                            <span class="console-text">Inicializando módulos RTP...</span>
+                            <span class="console-text">Módulos RTP carregados</span>
                             <span class="console-status console-ok">✓ OK</span>
                         </div>
                         <div class="console-line">
-                            <span class="console-prompt">[DATABASE]</span>
-                            <span class="console-text">Conectado ao servidor</span>
+                            <span class="console-prompt">[BANCO]</span>
+                            <span class="console-text">Conectado no servidor</span>
                             <span class="console-status console-ok">✓ OK</span>
                         </div>
                         <div class="console-line">
                             <span class="console-prompt">[SYNC]</span>
-                            <span class="console-text">Sincronização habilitada</span>
+                            <span class="console-text">Sincronização rolando</span>
                             <span class="console-status console-ok">✓ OK</span>
                         </div>
                         <div class="console-line">
                             <span class="console-prompt">[RTP]</span>
-                            <span class="console-text">Sistema ativo</span>
+                            <span class="console-text">Sistema tá on</span>
                             <span class="console-status console-active">● ATIVO</span>
                         </div>
                     </div>
@@ -395,8 +509,8 @@
 
     <!-- Floating Timer Button -->
     <button class="floating-timer-button" id="floatingTimerBtn">
-        <div class="floating-timer-text">CONNECTOR</div>
         <div class="floating-timer-display">
+            <span class="floating-timer-clock" aria-hidden="true">&#128336;</span>
             <span class="floating-timer-minutes" id="floatingTimerMinutes">01</span>
             <span class="floating-timer-separator">:</span>
             <span class="floating-timer-seconds" id="floatingTimerSeconds">27</span>
@@ -407,7 +521,6 @@
         <span class="floating-timer-pulse"></span>
     </button>
 
-    <!-- Floating Telegram Button -->
     <a class="floating-telegram" href="https://poppremio.com/tg" target="_blank" rel="noopener" aria-label="Abrir Telegram">
         <img class="telegram-icon" src="tg/tg.webp" alt="Telegram Pop RTP - Sinais e Dicas">
     </a>
@@ -440,11 +553,11 @@
             <!-- Banner Carousel -->
             <div class="popup-carousel" id="popupCarousel">
                 <div class="popup-carousel-track" id="popupCarouselTrack">
-                    <!-- Slide 1: POPBEA -->
+                    <!-- Slide 1: PopBea -->
                     <div class="popup-carousel-slide">
                         <a href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener" class="popup-banner-link">
                             <div class="popup-banner-image-wrapper">
-                                <img src="banner/POPBEA (1).jpg" alt="POPBEA - Nova Plataforma" class="popup-banner-image">
+                                <img src="banner/POPBEA (1).jpg" alt="PopBea - Top Nova Plataforma" class="popup-banner-image">
                             </div>
                         </a>
                     </div>
@@ -472,7 +585,7 @@
             <!-- Register Button (href updated dynamically by JS) -->
             <a href="https://popr8v6q4.com?ch=57378" target="_blank" rel="noopener" class="popup-register-btn" id="popupRegisterBtn">
                 <span class="register-btn-glow"></span>
-                <span class="register-btn-text">PARTICIPE AGORA - POPBEA</span>
+                <span class="register-btn-text">NOVO! REGISTRAR AGORA</span>
                 <span class="register-btn-icon">►</span>
             </a>
             
@@ -507,7 +620,7 @@
             <div class="modal-stats">
                 <div class="modal-stat">
                     <span class="stat-label">PLATAFORMAS:</span>
-                    <span class="stat-value">21</span>
+                    <span class="stat-value">18</span>
                 </div>
                 <div class="modal-stat">
                     <span class="stat-label">STATUS:</span>
@@ -593,6 +706,34 @@
     <script src="game-data.js"></script>
     <script src="provider_image_lists.js" onerror="console.log('Modo dinâmico')"></script>
     <script src="game_popularity.js"></script>
+    <!-- Telegram FOMO Notifications -->
+    <div class="tg-fomo-container" id="telegramFomoContainer"></div>
+
+    <!-- RTP Alert Modal -->
+    <div class="rtp-alert-overlay" id="rtpAlertModal">
+        <div class="rtp-alert-box">
+            <button class="rtp-alert-close" id="rtpAlertClose">×</button>
+            <div class="rtp-alert-header">
+                <span class="rtp-alert-icon">⚡</span>
+                <span class="rtp-alert-title">ALERTA RTP DETECTADO</span>
+            </div>
+            <div class="rtp-alert-game-img-wrap">
+                <img class="rtp-alert-game-img" id="rtpAlertGameImg" src="" alt="game" />
+            </div>
+            <div class="rtp-alert-rtp-row">
+                <span class="rtp-alert-rtp-label">RTP ATUAL</span>
+                <span class="rtp-alert-rtp-value" id="rtpAlertValue">96%</span>
+            </div>
+            <div class="rtp-alert-message">Esta janela de pagamento fecha em</div>
+            <div class="rtp-alert-countdown" id="rtpAlertCountdown">3:00</div>
+            <a href="https://c7m1qz8x.com?ch=85303" target="_blank" rel="noopener" class="rtp-alert-btn" id="rtpAlertBtn">
+                🎰 JOGAR AGORA
+            </a>
+        </div>
+    </div>
+
+    <script src="loading-features.js"></script>
     <script src="script.js"></script>
+    <script src="retention.js"></script>
 </body>
 </html>
