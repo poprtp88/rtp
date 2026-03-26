@@ -232,9 +232,12 @@
         if (ov) { ov.style.display = 'none'; }
         _overlayShown = false;
     }
+    
+    var _isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+                    .test(navigator.userAgent);
 
-    // ─── 7. DEVTOOLS DETECTION POLL ─────────────────────────────────────────────
     setInterval(function(){
+        if (_isMobile) return;
         var wDiff = window.outerWidth  - window.innerWidth;
         var hDiff = window.outerHeight - window.innerHeight;
         var open  = wDiff > _threshold || hDiff > _threshold;
