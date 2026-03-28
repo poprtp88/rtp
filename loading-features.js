@@ -429,7 +429,7 @@
         } else if (roll < 0.96) {
             amount = (Math.random() * 8000 + 2000).toFixed(2);      // R$2000–10000 (big)
         } else {
-            amount = (Math.random() * 90000 + 10000).toFixed(2);    // R$10000–100000 (jackpot)
+            amount = (Math.random() * 10000 + 10000).toFixed(2);    // R$10000–20000 (jackpot)
         }
 
         return { maskedId, game, platform, amount: parseFloat(amount) };
