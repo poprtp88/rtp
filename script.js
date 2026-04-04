@@ -950,8 +950,8 @@ function setupPopupBanner() {
 
     /** href and register-button text for each slide */
     const popupSlideData = [
-        { href: 'https://popr8v6q4.com?ch=57378', btnText: 'REGISTRAR AGORA - POPBEA' },
-        { href: 'https://c7m1qz8x.com?ch=85303', btnText: 'PARTICIPE AGORA - POPSUR' }
+        { href: 'https://pop5k1y9q.com/?ch=65117', btnText: 'PARTICIPE AGORA - POPFOI' },
+        { href: 'https://popr8v6q4.com?ch=57378', btnText: 'REGISTRAR AGORA - POPBEA' }
     ];
 
     let popupCurrent  = 0;
@@ -1059,7 +1059,6 @@ function generatePlatformCards() {
         // Add special class for the first platform (Gold)
         const isGold = index === 0;
         const isPlatform19 = platform.id === 19;
-        const isPlatform20 = platform.id === 20;
         const isPlatform21 = platform.id === 21;
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
         

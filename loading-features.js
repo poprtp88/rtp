@@ -345,8 +345,8 @@
             }
         },
         {
-            // Exactly 10 digits, prefix 1xxx (POPWB, POPMEL, POPSUR range)
-            names: ['POPWB', 'POPMEL', 'POPSUR'],
+            // Exactly 10 digits, prefix 1xxx (POPWB, POPMEL, POPFOI range)
+            names: ['POPWB', 'POPMEL', 'POPFOI'],
             generateId: function () {
                 // Real range: 1,000,000,000 – 1,999,999,999
                 return String(Math.floor(Math.random() * 900000000) + 1000000000);
@@ -521,22 +521,28 @@
     // MOBILE BANNER CAROUSEL
     // ============================================
 
+    /** Affiliate link for all PopFoi sidebanner / banner assets */
+    const MB_POPFOI_HREF = 'https://pop5k1y9q.com/?ch=65117';
+
     /**
-     * Platform definitions for the mobile banner strip.
-     * Each entry maps a 1-based index to its square/long image filenames and link href.
+     * Platform definitions for the mobile banner strip (6 image sets; UI shows 5 at a time).
+     * Each entry maps to square/long filenames and link href.
      * The center slot (index 2 in the 5-slot view) always shows the LONG image.
+     * Rotation uses a sliding window over all six entries.
      */
     const MB_PLATFORMS = [
-        /* Image set 1 = PopSur */
-        { id: 1, name: 'PopSur', square: 'sidebanner/SQUARE (1).png', long: 'sidebanner/LONG (1).png', href: 'https://c7m1qz8x.com?ch=85303'   },
-        /* Image set 2 = PopBea */
+        /* Image set 1 = PopBea */
         { id: 2, name: 'PopBea', square: 'sidebanner/SQUARE (2).png', long: 'sidebanner/LONG (2).png', href: 'https://popr8v6q4.com?ch=57378'   },
+        /* Image set 2 = PopFoi */
+        { id: 1, name: 'PopFoi', square: 'sidebanner/SQUARE (1).png', long: 'sidebanner/LONG (1).png', href: MB_POPFOI_HREF },
         /* Image set 3 = PopVai — use PopBea URL per owner instruction */
         { id: 3, name: 'PopVai', square: 'sidebanner/SQUARE (3).png', long: 'sidebanner/LONG (3).png', href: 'https://popr8v6q4.com?ch=57378'   },
         /* Image set 4 = PopLuz */
         { id: 4, name: 'PopLuz', square: 'sidebanner/SQUARE (4).png', long: 'sidebanner/LONG (4).png', href: 'https://popluz6n.com?ch=40617'    },
         /* Image set 5 = PopZoe — use PopBea URL (PopZoe replaced by PopBea) */
-        { id: 5, name: 'PopZoe', square: 'sidebanner/SQUARE (5).png', long: 'sidebanner/LONG (5).png', href: 'https://popr8v6q4.com?ch=57378'   }
+        { id: 5, name: 'PopZoe', square: 'sidebanner/SQUARE (5).png', long: 'sidebanner/LONG (5).png', href: 'https://popr8v6q4.com?ch=57378'   },
+        /* Image set 6 = PopFoi (alternate SQUARE/LONG) */
+        { id: 6, name: 'PopFoi', square: 'sidebanner/SQUARE (6).png', long: 'sidebanner/LONG (6).png', href: MB_POPFOI_HREF }
     ];
 
     /* Which slot index (0-based) is the "long/center" slot */
@@ -596,7 +602,20 @@
         const items = Array.from(row.querySelectorAll('.mb-item'));
         if (items.length !== 5) return;
 
-        let order = MB_PLATFORMS.slice();
+        const poolLen = MB_PLATFORMS.length;
+
+        /**
+         * Returns which five platforms are visible for a rotation offset (0 … poolLen-1).
+         * Inputs: off — starting index into MB_PLATFORMS. Output: array of five platform objects.
+         */
+        function getOrderForOffset(off) {
+            return Array.from({ length: 5 }, function (_, i) {
+                return MB_PLATFORMS[(off + i) % poolLen];
+            });
+        }
+
+        let offset = 0;
+        let order = getOrderForOffset(offset);
         mbApplyOrder(items, order);
 
         let animating = false;
@@ -608,7 +627,8 @@
             if (animating) return;
             animating = true;
 
-            const nextOrder = order.slice(1).concat(order[0]);
+            const nextOffset = (offset + 1) % poolLen;
+            const nextOrder = getOrderForOffset(nextOffset);
 
             /* ── SETUP: load next images off-screen right, no transition ── */
             items.forEach(function (item, i) {
@@ -665,6 +685,7 @@
                             });
 
                             order = nextOrder;
+                            offset = nextOffset;
                             animating = false;
                         }
 

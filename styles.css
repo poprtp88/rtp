@@ -2265,6 +2265,12 @@ body {
     height: auto;
 }
 
+/* EM BREVE on PopFoi popup slide — above banner image, clicks pass through to link */
+.popup-carousel .popup-banner-image-wrapper .platform-hot {
+    z-index: 5;
+    pointer-events: none;
+}
+
 /* Arrow navigation buttons */
 .popup-carousel-prev,
 .popup-carousel-next {
