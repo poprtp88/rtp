@@ -19,6 +19,8 @@
 const PLATFORMS_CONFIG = [
     { id: 22, url: 'https://pop5k1y9q.com/?ch=65117' },
     { id: 21, url: 'https://popr8v6q4.com?ch=57378' },
+    /* PopSur — card in grid; link disabled until launch (use #) */
+    { id: 20, url: '#' },
     { id: 19, url: 'https://vaxelroq.com?ch=81737' },
     { id: 18, url: 'https://popluz6n.com?ch=40617', name: 'NEW PLATFORM' },
     { id: 1, url: 'https://popduqo.com?ch=23890' },

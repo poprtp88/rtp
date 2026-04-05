@@ -86,7 +86,7 @@ const SITE_CONFIG = {
      * Customize with YOUR community links
      */
     socialLinks: {
-        telegram: 'https://poppremio.com/tg',
+        telegram: 'https://pop-agent.com/tg',
         whatsapp: 'https://pop-agent.com/wa'
     },
     

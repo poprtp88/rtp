@@ -1060,7 +1060,12 @@ function generatePlatformCards() {
         const isGold = index === 0;
         const isPlatform19 = platform.id === 19;
         const isPlatform21 = platform.id === 21;
+        const isPlatform20 = platform.id === 20;
+        const isPlatform22 = platform.id === 22;
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
+        if (isPlatform20) {
+            card.classList.add('platform-card--soon');
+        }
         
         card.setAttribute('data-url', platform.url);
         
@@ -1072,9 +1077,15 @@ function generatePlatformCards() {
         // Use local asset path for platforms 18+ (not on CDN), CDN for 1-17
         const imagePath = platform.id >= 18 ? `asset/${platform.id}.png` : `${CDN_BASE}/asset/${platform.id}.png`;
         
-        const statusOverlay = isEmBreve
-            ? ''
-            : '<div class="platform-status"><span class="status-dot"></span>ONLINE</div>';
+        /* PopFoi (22) + PopSur (20): EM BREVE replaces green ONLINE; other “#” platforms omit status */
+        let statusOverlay = '';
+        if (isPlatform20 || isPlatform22) {
+            statusOverlay =
+                '<div class="platform-status platform-status-embreve"><span class="status-dot"></span>EM BREVE</div>';
+        } else if (!isEmBreve) {
+            statusOverlay =
+                '<div class="platform-status"><span class="status-dot"></span>ONLINE</div>';
+        }
         
         card.innerHTML = `
             ${hotBadge}
