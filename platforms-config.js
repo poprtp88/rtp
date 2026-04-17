@@ -10,16 +10,19 @@
  * 3. Load this file BEFORE script.js in your HTML
  * 
  * NOTE: The platform images (1.png through 17.png) are loaded from CDN.
- *       Platforms 18+ use local assets (asset/{id}.png), including 21.png (PopBea logo)
- *       and 22.png (PopFoi logo).
+ *       Platforms 18+ use local assets (asset/{id}.png), including 23.png (POPTIG logo),
+ *       22.png (PopFoi logo), 21.png (PopBea logo), and 20.png (PopTig / TIG card art).
+ *       POPTIG (23) is listed first so it appears first in the platform modal and gets the gold card.
  *       Only the URLs are customizable per site.
  */
 
 // Platform configuration - CUSTOMIZE THESE LINKS FOR YOUR SITE
 const PLATFORMS_CONFIG = [
+    /* POPTIG — first in modal */
+    { id: 23, url: 'https://pop2x8k5c1.com?ch=93267' },
     { id: 22, url: 'https://pop5k1y9q.com/?ch=65117' },
     { id: 21, url: 'https://popr8v6q4.com?ch=57378' },
-    /* PopSur — card in grid; link disabled until launch (use #) */
+    /* PopTig (TIG) — was PopSur; card uses asset/20.png; link disabled until launch (use #) */
     { id: 20, url: '#' },
     { id: 19, url: 'https://vaxelroq.com?ch=81737' },
     { id: 18, url: 'https://popluz6n.com?ch=40617', name: 'NEW PLATFORM' },

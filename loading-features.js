@@ -524,24 +524,29 @@
     /** Affiliate link for all PopFoi sidebanner / banner assets */
     const MB_POPFOI_HREF = 'https://pop5k1y9q.com/?ch=65117';
 
+    /** Affiliate link for POPTIG (sidebanner set 7, matches platforms id 23) */
+    const MB_POPTIG_HREF = 'https://pop2x8k5c1.com?ch=93267';
+
     /**
-     * Platform definitions for the mobile banner strip (6 image sets; UI shows 5 at a time).
+     * Platform definitions for the mobile banner strip (7 image sets; UI shows 5 at a time).
      * Each entry maps to square/long filenames and link href.
      * The center slot (index 2 in the 5-slot view) always shows the LONG image.
-     * Rotation uses a sliding window over all six entries.
+     * Rotation uses a sliding window over all seven entries.
      */
     const MB_PLATFORMS = [
-        /* Image set 1 = PopBea */
+        /* Image set 1 = POPTIG — first in rotation */
+        { id: 7, name: 'POPTIG', square: 'sidebanner/SQUARE (7).png', long: 'sidebanner/LONG (7).png', href: MB_POPTIG_HREF },
+        /* Image set 2 = PopBea */
         { id: 2, name: 'PopBea', square: 'sidebanner/SQUARE (2).png', long: 'sidebanner/LONG (2).png', href: 'https://popr8v6q4.com?ch=57378'   },
-        /* Image set 2 = PopFoi */
+        /* Image set 3 = PopFoi */
         { id: 1, name: 'PopFoi', square: 'sidebanner/SQUARE (1).png', long: 'sidebanner/LONG (1).png', href: MB_POPFOI_HREF },
-        /* Image set 3 = PopVai — use PopBea URL per owner instruction */
+        /* Image set 4 = PopVai — use PopBea URL per owner instruction */
         { id: 3, name: 'PopVai', square: 'sidebanner/SQUARE (3).png', long: 'sidebanner/LONG (3).png', href: 'https://popr8v6q4.com?ch=57378'   },
-        /* Image set 4 = PopLuz */
+        /* Image set 5 = PopLuz */
         { id: 4, name: 'PopLuz', square: 'sidebanner/SQUARE (4).png', long: 'sidebanner/LONG (4).png', href: 'https://popluz6n.com?ch=40617'    },
-        /* Image set 5 = PopZoe — use PopBea URL (PopZoe replaced by PopBea) */
+        /* Image set 6 = PopZoe — use PopBea URL (PopZoe replaced by PopBea) */
         { id: 5, name: 'PopZoe', square: 'sidebanner/SQUARE (5).png', long: 'sidebanner/LONG (5).png', href: 'https://popr8v6q4.com?ch=57378'   },
-        /* Image set 6 = PopFoi (alternate SQUARE/LONG) */
+        /* Image set 7 = PopFoi (alternate SQUARE/LONG) */
         { id: 6, name: 'PopFoi', square: 'sidebanner/SQUARE (6).png', long: 'sidebanner/LONG (6).png', href: MB_POPFOI_HREF }
     ];
 
@@ -617,6 +622,13 @@
         let offset = 0;
         let order = getOrderForOffset(offset);
         mbApplyOrder(items, order);
+
+        row.addEventListener('click', function (e) {
+            const link = e.target.closest('.mb-item');
+            if (link && link.getAttribute('href') === '#') {
+                e.preventDefault();
+            }
+        });
 
         let animating = false;
 

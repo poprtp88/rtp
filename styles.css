@@ -1106,12 +1106,18 @@ body {
     width: 100%;
     height: 100%;
     position: relative;
+    align-items: center;
+    justify-content: center;
+    /* Inset so wide logos (e.g. POPTIG) are not clipped by the rounded card edge */
+    padding: 6px 10px;
+    box-sizing: border-box;
 }
 
 .side-banner-slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* cover crops wide art in a tall slot; contain keeps the full logo visible */
+    object-fit: contain;
     object-position: center;
 }
 
@@ -1244,6 +1250,10 @@ body {
     display: block;
     text-decoration: none;
     cursor: pointer;
+}
+
+.carousel-slide--disabled {
+    cursor: default;
 }
 
 .carousel-slide img {

@@ -173,6 +173,9 @@ if (typeof PLATFORMS_CONFIG !== 'undefined' && Array.isArray(PLATFORMS_CONFIG) &
     console.log('⚠️ Sem config externo — usando plataformas padrão');
 }
 
+/** POPTIG / TIG creatives — keep in sync with platforms-config id 23 and index.html banner CTAs */
+const POPTIG_AFFILIATE_HREF = 'https://pop2x8k5c1.com?ch=93267';
+
 // Estado da aplicação
 let showAllGames = true;
 let currentProvider = 'all';
@@ -721,7 +724,13 @@ function setupCarousel() {
     const dots = document.querySelectorAll('.dot');
     
     if (!track || !prevBtn || !nextBtn) return;
-    
+
+    track.querySelectorAll('a.carousel-slide--disabled').forEach(function (slide) {
+        slide.addEventListener('click', function (e) {
+            e.preventDefault();
+        });
+    });
+
     let currentSlide = 0;
     const totalSlides = document.querySelectorAll('.carousel-slide').length;
     
@@ -778,7 +787,14 @@ function setupSideBannerCarousel() {
     const totalSlides = slides.length;
     
     if (totalSlides === 0) return;
-    
+
+    track.addEventListener('click', function (e) {
+        const link = e.target.closest('a[href="#"]');
+        if (link && track.contains(link)) {
+            e.preventDefault();
+        }
+    });
+
     /**
      * Updates the carousel position and active dot indicator
      */
@@ -935,9 +951,14 @@ function setupPopupBanner() {
         }
     });
     
-    // Prevent closing when clicking on banner links
+    // Prevent closing when clicking on banner links; block navigation for placeholder "#" hrefs
     popupContainer.querySelectorAll('.popup-banner-link').forEach(link => {
-        link.addEventListener('click', (e) => e.stopPropagation());
+        link.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (link.getAttribute('href') === '#') {
+                e.preventDefault();
+            }
+        });
     });
 
     // ── Popup Carousel ───────────────────────────────────────────────
@@ -951,7 +972,7 @@ function setupPopupBanner() {
     /** href and register-button text for each slide */
     const popupSlideData = [
         { href: 'https://pop5k1y9q.com/?ch=65117', btnText: 'PARTICIPE AGORA - POPFOI' },
-        { href: 'https://popr8v6q4.com?ch=57378', btnText: 'REGISTRAR AGORA - POPBEA' }
+        { href: POPTIG_AFFILIATE_HREF, btnText: 'PARTICIPE AGORA — POPTIG' }
     ];
 
     let popupCurrent  = 0;
@@ -970,6 +991,15 @@ function setupPopupBanner() {
             const textEl = popupRegisterBtn.querySelector('.register-btn-text');
             if (textEl) textEl.textContent = popupSlideData[popupCurrent].btnText;
         }
+    }
+
+    if (popupRegisterBtn) {
+        popupRegisterBtn.addEventListener('click', (e) => {
+            const h = popupRegisterBtn.getAttribute('href');
+            if (!h || h === '#') {
+                e.preventDefault();
+            }
+        });
     }
 
     /** Resets auto-advance timer */
@@ -1062,24 +1092,26 @@ function generatePlatformCards() {
         const isPlatform21 = platform.id === 21;
         const isPlatform20 = platform.id === 20;
         const isPlatform22 = platform.id === 22;
+        const isPlatform23 = platform.id === 23;
         card.className = isGold ? 'platform-card platform-gold' : 'platform-card';
-        if (isPlatform20) {
+
+        card.setAttribute('data-url', platform.url);
+
+        const isEmBreve = !platform.url || platform.url === '#';
+        if (isPlatform20 || (isPlatform23 && isEmBreve)) {
             card.classList.add('platform-card--soon');
         }
-        
-        card.setAttribute('data-url', platform.url);
-        
-        const isEmBreve = !platform.url || platform.url === '#';
-        // Platform 21 / 19 (PopBea assets): HOT badge
-        const hotBadge = (isPlatform19 || isPlatform21) ? '<div class="platform-hot">HOT</div>' : '';
+
+        // Platform 19 (PopVai-style asset): HOT badge
+        const hotBadge = isPlatform19 ? '<div class="platform-hot">HOT</div>' : '';
         const newPlatformHotBadge = '';
         
         // Use local asset path for platforms 18+ (not on CDN), CDN for 1-17
         const imagePath = platform.id >= 18 ? `asset/${platform.id}.png` : `${CDN_BASE}/asset/${platform.id}.png`;
         
-        /* PopFoi (22) + PopSur (20): EM BREVE replaces green ONLINE; other “#” platforms omit status */
+        /* PopFoi (22) + PopTig (20): EM BREVE; POPTIG (23) only when url is “#”; live id 23 shows ONLINE */
         let statusOverlay = '';
-        if (isPlatform20 || isPlatform22) {
+        if (isPlatform20 || isPlatform22 || (isPlatform23 && isEmBreve)) {
             statusOverlay =
                 '<div class="platform-status platform-status-embreve"><span class="status-dot"></span>EM BREVE</div>';
         } else if (!isEmBreve) {
@@ -1115,6 +1147,11 @@ function generatePlatformCards() {
         modalGrid.appendChild(card);
     });
     
+    const modalPlatformCount = document.getElementById('modalPlatformCount');
+    if (modalPlatformCount) {
+        modalPlatformCount.textContent = String(CONFIG.platforms.length);
+    }
+
     console.log(`✅ ${CONFIG.platforms.length} plataformas carregadas no modal`);
 }
 
